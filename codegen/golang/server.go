@@ -123,16 +123,18 @@ func (gs Server) Title() string {
 	return gs.apiDef.Title
 }
 
+// RouteImports returns all import packages
 func (gs Server) RouteImports() []string {
 	imports := make(map[string]struct{})
 
-	baseAPIDir := filepath.Join(gs.RootImportPath, serverAPIDir)
+	baseAPIDir := gs.RootImportPath + "/" + serverAPIDir
 	for _, rd := range gs.ResourcesDef {
 		imports[baseAPIDir+"/"+rd.PackageName] = struct{}{}
 	}
 	return commons.MapToSortedStrings(imports)
 }
 
+// ShowAPIDocsAndIndex returns if show api docs and index
 func (gs Server) ShowAPIDocsAndIndex() bool {
 	return !resource.HasCatchAllInRootRoute(gs.apiDef)
 }
