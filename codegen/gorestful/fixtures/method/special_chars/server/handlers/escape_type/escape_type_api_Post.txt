@@ -1,0 +1,23 @@
+// THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+package escape_type
+
+import (
+	"encoding/json"
+	"examples.com/libro/types"
+	"net/http"
+)
+
+// Post is the handler for POST /escape_type
+func (api Escape_typeAPI) Post(w http.ResponseWriter, r *http.Request) {
+	var reqBody types.User2_0
+
+	// decode request
+	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
+		w.WriteHeader(400)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	var respBody types.User2_0
+	json.NewEncoder(w).Encode(&respBody)
+}

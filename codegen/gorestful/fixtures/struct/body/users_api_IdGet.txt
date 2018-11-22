@@ -1,0 +1,18 @@
+// THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+package users
+
+import (
+	"encoding/json"
+	"examples.com/types"
+	"net/http"
+)
+
+// IdGet is the handler for GET /users/{id}
+// get id of users.
+// This method will be return single user object.
+// Replace ID with user defined field.
+func (api UsersAPI) IdGet(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var respBody types.UsersIdGetRespBody
+	json.NewEncoder(w).Encode(&respBody)
+}

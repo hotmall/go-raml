@@ -1,0 +1,5 @@
+package client
+
+type City struct {
+	Names []string `json:"Names"`
+}

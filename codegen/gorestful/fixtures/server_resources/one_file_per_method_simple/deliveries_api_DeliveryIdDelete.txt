@@ -1,0 +1,11 @@
+// THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+package deliveries
+
+import (
+	"net/http"
+)
+
+// DeliveryIdDelete is the handler for DELETE /deliveries/{deliveryId}
+// Cancel a specific delivery
+func (api DeliveriesAPI) DeliveryIdDelete(w http.ResponseWriter, r *http.Request) {
+}

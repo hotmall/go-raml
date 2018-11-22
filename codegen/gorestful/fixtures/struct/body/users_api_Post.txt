@@ -1,0 +1,21 @@
+// THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+package users
+
+import (
+	"encoding/json"
+	"examples.com/types"
+	"net/http"
+)
+
+// Post is the handler for POST /users
+// create a user
+func (api UsersAPI) Post(w http.ResponseWriter, r *http.Request) {
+	var reqBody types.UsersPostReqBody
+
+	// decode request
+	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
+		w.WriteHeader(400)
+		return
+	}
+
+}

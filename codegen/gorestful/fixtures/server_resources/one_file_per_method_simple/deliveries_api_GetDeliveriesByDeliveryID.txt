@@ -1,0 +1,11 @@
+// THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+package deliveries
+
+import (
+	"net/http"
+)
+
+// GetDeliveriesByDeliveryID is the handler for GET /deliveries/{deliveryId}
+// Get information on a specific delivery
+func (api DeliveriesAPI) GetDeliveriesByDeliveryID(w http.ResponseWriter, r *http.Request) {
+}

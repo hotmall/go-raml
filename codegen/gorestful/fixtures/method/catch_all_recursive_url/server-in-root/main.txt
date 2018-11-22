@@ -1,0 +1,24 @@
+// THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+package main
+
+import (
+	"log"
+	"net/http"
+
+	"examples.com/libro/goraml"
+
+	"github.com/gorilla/mux"
+	"gopkg.in/validator.v2"
+)
+
+func main() {
+	// input validator
+	validator.SetValidationFunc("multipleOf", goraml.MultipleOf)
+
+	r := mux.NewRouter()
+
+	initRoutes(r)
+
+	log.Println("starting server")
+	http.ListenAndServe(":5000", r)
+}

@@ -1,0 +1,5 @@
+package client
+
+type UsersUserIdAddressPostRespBody struct {
+	Address string `json:"address"`
+}

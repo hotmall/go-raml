@@ -1,0 +1,23 @@
+// THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+package users
+
+import (
+	"encoding/json"
+	"examples.com/types"
+	"net/http"
+)
+
+// IdPut is the handler for PUT /users/{id}
+func (api UsersAPI) IdPut(w http.ResponseWriter, r *http.Request) {
+	var reqBody types.Catanimal
+
+	// decode request
+	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
+		w.WriteHeader(400)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	var respBody types.UnionCatanimal
+	json.NewEncoder(w).Encode(&respBody)
+}

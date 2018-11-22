@@ -1,0 +1,19 @@
+// THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+package builtin
+
+import (
+	"encoding/json"
+	"net/http"
+)
+
+// Morecomplextype is the handler for PUT /builtin
+func (api BuiltinAPI) Morecomplextype(w http.ResponseWriter, r *http.Request) {
+	var reqBody [][]string
+
+	// decode request
+	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
+		w.WriteHeader(400)
+		return
+	}
+
+}

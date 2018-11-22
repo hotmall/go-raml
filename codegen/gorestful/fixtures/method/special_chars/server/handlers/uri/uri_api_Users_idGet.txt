@@ -1,0 +1,15 @@
+// THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+package uri
+
+import (
+	"encoding/json"
+	"examples.com/libro/types"
+	"net/http"
+)
+
+// Users_idGet is the handler for GET /uri/{users-id}
+func (api UriAPI) Users_idGet(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var respBody types.User2_0
+	json.NewEncoder(w).Encode(&respBody)
+}

@@ -1,0 +1,11 @@
+// THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+package deliveries
+
+import (
+	"net/http"
+)
+
+// DeliveryIdPatch is the handler for PATCH /deliveries/{deliveryId}
+// Update the information on a specific delivery
+func (api DeliveriesAPI) DeliveryIdPatch(w http.ResponseWriter, r *http.Request) {
+}
