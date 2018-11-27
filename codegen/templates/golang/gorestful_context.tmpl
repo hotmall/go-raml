@@ -1,0 +1,15 @@
+{{- define "gorestful_context_template" -}}
+
+package {{ .PackageName }}
+
+type {{ .Name }} struct {
+    {{- range $key, $value := .Fields }}
+        {{$value.Name}} {{if eq $value.IsComposition false}} {{$value.Type}} `json:"{{$key}}{{if eq $value.IsOmitted true}},omitempty{{end}}"{{if $value.Validators}} validate:"{{$value.Validators}}"{{end}}` {{end}}
+    {{- end -}}
+}
+
+func (s {{.Name}}) Validate() error {
+    return validator.Validate(s)
+}
+
+{{- end -}}
