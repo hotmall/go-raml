@@ -1,0 +1,50 @@
+{{- define "gorestful_service_template" -}}
+// THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+package service
+
+import (
+    {{ range $k, $v := .APILibImportPaths -}}
+        {{$v}}
+    {{ end -}}
+)
+{{$apiName := .Name}}
+// {{.Name}}Service is Service implementation of {{.Endpoint}} root endpoint
+type {{.Name}}Service struct {
+}
+
+
+{{ range $k, $v := .Methods }}
+// {{$v.MethodName}} is the handler for {{$v.Verb}} {{$v.Endpoint}}
+{{- range $kf, $vf := $v.FuncComments}}
+// {{$vf}}{{end}}
+func(s {{$apiName}}Service) {{$v.MethodName}}(w http.ResponseWriter, r *http.Request) {
+	{{- range $kq, $vq := $v.QueryParameters -}}
+    // {{$kq}} := req.FormValue("{{$kq}}")
+	{{- end }}
+	{{- if .ReqBody -}}
+	var reqBody {{.ReqBody}}
+
+    // decode request
+	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
+		w.WriteHeader(400)
+		return
+	}
+    {{ if .ReqBodyNeedValidation}}
+    // validate request
+    if err := reqBody.Validate(); err != nil {
+        w.WriteHeader(400)
+        w.Write([]byte(`{"error":"`+err.Error()+`"}`))
+        return
+    }
+    {{- end }}
+	{{- end }}
+
+	{{- if .RespBody }}
+	var respBody {{.RespBody}}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(&respBody);
+	{{- end }}
+}
+{{- end -}}
+
+{{- end -}}
