@@ -6,45 +6,92 @@ import (
     {{ range $k, $v := .APILibImportPaths -}}
         {{$v}}
     {{ end -}}
+	"github.com/emicklei/go-restful"
+	"strconv"
 )
 {{$apiName := .Name}}
 // {{.Name}}Service is Service implementation of {{.Endpoint}} root endpoint
 type {{.Name}}Service struct {
+	*restful.WebService
+	delegate {{.Name}}Delegate
 }
 
+// New{{.Name}}Service create {{.Name}}Service object
+func New{{.Name}}Service(delegate {{.Name}}Delegate) *{{.Name}}Service {
+	ws := &{{.Name}}Service{
+        WebService: new(restful.WebService),
+        delegate: delegate,
+    }
+
+	{{ range $k, $v := .Methods }}
+	ws.Route(ws.{{$v.Verb}}("{{$v.Endpoint}}").To(ws.{{$v.MethodName}}))
+	{{- end}}
+
+	return ws
+}
 
 {{ range $k, $v := .Methods }}
 // {{$v.MethodName}} is the handler for {{$v.Verb}} {{$v.Endpoint}}
 {{- range $kf, $vf := $v.FuncComments}}
 // {{$vf}}{{end}}
-func(s {{$apiName}}Service) {{$v.MethodName}}(w http.ResponseWriter, r *http.Request) {
-	{{- range $kq, $vq := $v.QueryParameters -}}
-    // {{$kq}} := req.FormValue("{{$kq}}")
+func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restful.Response) {
+	var reqContext types.{{$v.MethodName}}Context
+	{{- range $kq, $vq := $v.QueryParameters }}
+    {{$kq}} := req.FormValue("{{$kq}}")
+	{{- if eq $vq.Type "integer"}}
+	if {{$kq}} != "" {
+		reqContext.{{$kq|Title}} = strconv.Atoi({{$kq}})
+	}
+	{{- else}}
+	reqContext.{{$kq|Title}} = {{$kq}}
+	{{- end}}
 	{{- end }}
-	{{- if .ReqBody -}}
-	var reqBody {{.ReqBody}}
 
+	// validate context
+    if err := reqContext.Validate(); err != nil {
+        resp.WriteHeader(400)
+        resp.Header().Set("Content-Type", "application/json")
+        resp.Write([]byte(`{"error":"`+err.Error()+`"}`))
+        return
+    }
+	{{- if .ReqBody }}
+	
+	var reqBody {{.ReqBody}}
     // decode request
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		w.WriteHeader(400)
+        resp.Header().Set("Content-Type", "application/json")
+        w.Write([]byte(`{"error":"`+err.Error()+`"}`))
 		return
 	}
     {{ if .ReqBodyNeedValidation}}
     // validate request
     if err := reqBody.Validate(); err != nil {
         w.WriteHeader(400)
+        resp.Header().Set("Content-Type", "application/json")
         w.Write([]byte(`{"error":"`+err.Error()+`"}`))
         return
     }
     {{- end }}
 	{{- end }}
 
+	respHeader{{if .RespBody}}, respBody{{end}}, err := delegate.{{$v.MethodName}}(reqContext{{if .ReqBody}}, reqBody{{end}})
+	if err != nil {
+        resp.WriteHeader(err.Status)
+        resp.Header().Set("Content-Type", "application/json")
+        w.Write([]byte(`{"error":"`+err.Error()+`"}`))
+        return
+    }
+
+	resp.WriteHeader({{.FirstSuccessRespStatus}})
+
 	{{- if .RespBody }}
-	var respBody {{.RespBody}}
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(&respBody);
+	resp.Header().Set("Content-Type", "application/json")
+	for k, v := range respHeader {
+		resp.Header().Set(k, v)
+	}
+	json.NewEncoder(resp).Encode(&respBody);
 	{{- end }}
 }
 {{- end -}}
-
 {{- end -}}
