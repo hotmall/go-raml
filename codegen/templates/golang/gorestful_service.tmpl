@@ -3,25 +3,28 @@
 package service
 
 import (
-    {{ range $k, $v := .APILibImportPaths -}}
+    {{ range $k, $v := .ServiceImporters -}}
         {{$v}}
-    {{ end -}}
-	"github.com/emicklei/go-restful"
-	"strconv"
+    {{end}}
 )
 {{$apiName := .Name}}
 // {{.Name}}Service is Service implementation of {{.Endpoint}} root endpoint
 type {{.Name}}Service struct {
 	*restful.WebService
-	delegate {{.Name}}Delegate
+	delegator delegate.{{.Name}}Delegate
 }
 
 // New{{.Name}}Service create {{.Name}}Service object
-func New{{.Name}}Service(delegate {{.Name}}Delegate) *{{.Name}}Service {
+func New{{.Name}}Service(delegator delegate.{{.Name}}Delegate) *{{.Name}}Service {
 	ws := &{{.Name}}Service{
         WebService: new(restful.WebService),
-        delegate: delegate,
+        delegator: delegator,
     }
+
+	ws.
+		Path("{{.APIDef.BaseURI}}").
+		Consumes("{{.APIDef.MediaType}}").
+		Produces("{{.APIDef.MediaType}}")
 
 	{{ range $k, $v := .Methods }}
 	ws.Route(ws.{{$v.Verb}}("{{$v.Endpoint}}").To(ws.{{$v.MethodName}}))
@@ -37,7 +40,18 @@ func New{{.Name}}Service(delegate {{.Name}}Delegate) *{{.Name}}Service {
 func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restful.Response) {
 	var reqContext types.{{$v.MethodName}}Context
 	{{- range $kq, $vq := $v.QueryParameters }}
-    {{$kq}} := req.FormValue("{{$kq}}")
+    {{$kq}} := req.QueryParameter("{{$kq}}")
+	{{- if eq $vq.Type "integer"}}
+	if {{$kq}} != "" {
+		reqContext.{{$kq|Title}}, _ = strconv.Atoi({{$kq}})
+	}
+	{{- else}}
+	reqContext.{{$kq|Title}} = {{$kq}}
+	{{- end}}
+	{{- end }}
+
+	{{- range $kq, $vq := $v.URIParameters }}
+    {{$kq}} := req.PathParameter("{{$kq}}")
 	{{- if eq $vq.Type "integer"}}
 	if {{$kq}} != "" {
 		reqContext.{{$kq|Title}} = strconv.Atoi({{$kq}})
@@ -50,7 +64,7 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 	// validate context
     if err := reqContext.Validate(); err != nil {
         resp.WriteHeader(400)
-        resp.Header().Set("Content-Type", "application/json")
+        resp.AddHeader("Content-Type", "application/json")
         resp.Write([]byte(`{"error":"`+err.Error()+`"}`))
         return
     }
@@ -58,39 +72,46 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 	
 	var reqBody {{.ReqBody}}
     // decode request
-	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
-		w.WriteHeader(400)
-        resp.Header().Set("Content-Type", "application/json")
-        w.Write([]byte(`{"error":"`+err.Error()+`"}`))
+	if err := req.ReadEntity(&reqBody); err != nil {
+		resp.WriteHeader(400)
+        resp.AddHeader("Content-Type", "application/json")
+        resp.Write([]byte(`{"error":"`+err.Error()+`"}`))
 		return
 	}
     {{ if .ReqBodyNeedValidation}}
     // validate request
     if err := reqBody.Validate(); err != nil {
-        w.WriteHeader(400)
-        resp.Header().Set("Content-Type", "application/json")
-        w.Write([]byte(`{"error":"`+err.Error()+`"}`))
+        resp.WriteHeader(400)
+        resp.AddHeader("Content-Type", "application/json")
+        resp.Write([]byte(`{"error":"`+err.Error()+`"}`))
         return
     }
     {{- end }}
 	{{- end }}
 
-	respHeader{{if .RespBody}}, respBody{{end}}, err := delegate.{{$v.MethodName}}(reqContext{{if .ReqBody}}, reqBody{{end}})
+	respHeader{{if .RespBody}}, respBody{{end}}, err := s.delegator.{{$v.MethodName}}(reqContext{{if .ReqBody}}, reqBody{{end}})
 	if err != nil {
         resp.WriteHeader(err.Status)
-        resp.Header().Set("Content-Type", "application/json")
-        w.Write([]byte(`{"error":"`+err.Error()+`"}`))
+        resp.AddHeader("Content-Type", "application/json")
+        resp.Write([]byte(`{"error":"`+err.Error()+`"}`))
         return
     }
-
-	resp.WriteHeader({{.FirstSuccessRespStatus}})
+	
+	for k, v := range respHeader {
+		resp.AddHeader(k, v)
+	}
 
 	{{- if .RespBody }}
-	resp.Header().Set("Content-Type", "application/json")
-	for k, v := range respHeader {
-		resp.Header().Set(k, v)
+	resp.AddHeader("Content-Type", "application/json")
+
+	if err := resp.WriteEntity(respBody); err != nil {
+		resp.WriteHeader(500)
+        resp.AddHeader("Content-Type", "application/json")
+        resp.Write([]byte(`{"error":"`+err.Error()+`"}`))
+        return
 	}
-	json.NewEncoder(resp).Encode(&respBody);
+	{{- else}}
+	resp.WriteHeader({{.FirstSuccessRespStatus}})
 	{{- end }}
 }
 {{- end -}}
