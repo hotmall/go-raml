@@ -1,0 +1,23 @@
+{{- define "gorestful_main" -}}
+// THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+package {{.PackageName}}
+
+import (
+	"log"
+	"net/http"
+
+    "{{.RootImportPath}}/goraml"
+    _ "{{.RootImportPath}}/resource"
+
+    "gopkg.in/validator.v2"
+)
+
+func main() {
+    // input validator
+    validator.SetValidationFunc("multipleOf", goraml.MultipleOf)
+
+	log.Println("starting server")
+    log.Fatal(http.ListenAndServe(":5000", nil))
+}
+
+{{- end -}}
