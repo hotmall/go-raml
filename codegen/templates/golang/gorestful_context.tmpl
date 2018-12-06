@@ -1,14 +1,20 @@
 {{- define "gorestful_context_template" -}}
 
-package {{ .PackageName }}
+package {{.PackageName}}
 
-type {{ .Name }} struct {
+import (
+	"gopkg.in/validator.v2"
+)
+
+// {{.Name}}Context is the context of method {{.Name}}
+type {{.Name}}Context struct {
     {{- range $key, $value := .Fields }}
         {{$value.Name}} {{if eq $value.IsComposition false}} {{$value.Type}} `json:"{{$key}}{{if eq $value.IsOmitted true}},omitempty{{end}}"{{if $value.Validators}} validate:"{{$value.Validators}}"{{end}}` {{end}}
     {{- end -}}
 }
 
-func (s {{.Name}}) Validate() error {
+// Validate check if the data is legal
+func (s {{.Name}}Context) Validate() error {
     return validator.Validate(s)
 }
 
