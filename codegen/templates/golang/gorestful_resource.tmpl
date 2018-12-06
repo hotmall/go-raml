@@ -1,0 +1,28 @@
+{{- define "gorestful_resource_template" -}}
+// THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+package resource
+
+import (
+    {{ range $k, $v := .ResourceImporters -}}
+        {{$v}}
+    {{end}}
+)
+
+// {{.Name}}Resource is {{.Name}}Service delegate implementation of {{.Endpoint}} root endpoint
+type {{.Name}}Resource struct {
+}
+
+{{$resourceName := .Name}}
+{{- range $k, $v := .Methods}}
+// {{$v.MethodName}} is the handler for {{$v.Verb}} {{$v.Endpoint}}
+func (r {{$resourceName}}Resource) {{$v.MethodName}}(reqContext types.{{$v.MethodName}}Context{{if .ReqBody}}, reqBody {{.ReqBody}}{{end}}) (respHeader map[string]string{{if .RespBody}}, respBody {{.RespBody}}{{end}}, e *types.Error) {
+    return
+}
+{{end}}
+
+func init() {
+    r := new({{.Name}}Resource)
+    ws := service.New{{.Name}}Service(r)
+    restful.Add(ws.WebService)
+}
+{{end -}}
