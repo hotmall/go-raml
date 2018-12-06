@@ -1,14 +1,16 @@
 {{- define "gorestful_error_template" -}}
 package types
 
-type Message struct {
-    Code string `json:"code"`
-    Text string `json:"text"`
+type Error struct {
+    error `json:"error"`
+    Status int `json:"status"`
 }
 
-type Error struct {
-    Status int8 `json:"status"`
-    Message Error `json:"message"`
+func NewError(status int, err error) *Error {
+	return &Error{
+		error:  err,
+		Status: status,
+	}
 }
 
 {{- end -}}
