@@ -3,9 +3,9 @@
 package service
 
 import (
-    {{ range $k, $v := .ServiceImporters -}}
-        {{$v}}
-    {{end}}
+	{{ range $k, $v := .ServiceImporters -}}
+		{{$v}}
+	{{end}}
 )
 {{$apiName := .Name}}
 // {{.Name}}Service is Service implementation of {{.Endpoint}} root endpoint
@@ -17,9 +17,9 @@ type {{.Name}}Service struct {
 // New{{.Name}}Service create {{.Name}}Service object
 func New{{.Name}}Service(delegator delegate.{{.Name}}Delegate) *{{.Name}}Service {
 	ws := &{{.Name}}Service{
-        WebService: new(restful.WebService),
-        delegator: delegator,
-    }
+		WebService: new(restful.WebService),
+		delegator: delegator,
+	}
 
 	ws.
 		Path("{{.APIDef.BaseURI}}").
@@ -40,7 +40,7 @@ func New{{.Name}}Service(delegator delegate.{{.Name}}Delegate) *{{.Name}}Service
 func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restful.Response) {
 	var reqContext types.{{$v.MethodName}}Context
 	{{- range $kq, $vq := $v.QueryParameters }}
-    {{$kq}} := req.QueryParameter("{{$kq}}")
+	{{$kq}} := req.QueryParameter("{{$kq}}")
 	{{- if eq $vq.Type "integer"}}
 	if {{$kq}} != "" {
 		reqContext.{{$kq|Title}}, _ = strconv.Atoi({{$kq}})
@@ -51,7 +51,7 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 	{{- end }}
 
 	{{- range $kq, $vq := $v.URIParameters }}
-    {{$kq}} := req.PathParameter("{{$kq}}")
+	{{$kq}} := req.PathParameter("{{$kq}}")
 	{{- if eq $vq.Type "integer"}}
 	if {{$kq}} != "" {
 		reqContext.{{$kq|Title}} = strconv.Atoi({{$kq}})
@@ -62,53 +62,51 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 	{{- end }}
 
 	// validate context
-    if err := reqContext.Validate(); err != nil {
-        resp.WriteHeader(400)
-        resp.AddHeader("Content-Type", "application/json")
-        resp.Write([]byte(`{"error":"`+err.Error()+`"}`))
-        return
-    }
+	if err := reqContext.Validate(); err != nil {
+		result := make(map[string]string, 1)
+		result["error"] = err.Error()
+		resp.WriteHeaderAndEntity(400, result)
+		return
+    	}
 	{{- if .ReqBody }}
 	
 	var reqBody {{.ReqBody}}
-    // decode request
+	// decode request
 	if err := req.ReadEntity(&reqBody); err != nil {
-		resp.WriteHeader(400)
-        resp.AddHeader("Content-Type", "application/json")
-        resp.Write([]byte(`{"error":"`+err.Error()+`"}`))
+		result := make(map[string]string, 1)
+		result["error"] = err.Error()
+		resp.WriteHeaderAndEntity(400, result)
 		return
 	}
-    {{ if .ReqBodyNeedValidation}}
-    // validate request
-    if err := reqBody.Validate(); err != nil {
-        resp.WriteHeader(400)
-        resp.AddHeader("Content-Type", "application/json")
-        resp.Write([]byte(`{"error":"`+err.Error()+`"}`))
-        return
-    }
-    {{- end }}
+	{{ if .ReqBodyNeedValidation}}
+	// validate request
+	if err := reqBody.Validate(); err != nil {
+		result := make(map[string]string, 1)
+		result["error"] = err.Error()
+		resp.WriteHeaderAndEntity(400, result)
+		return
+    	}
+	{{- end }}
 	{{- end }}
 
 	respHeader{{if .RespBody}}, respBody{{end}}, err := s.delegator.{{$v.MethodName}}(reqContext{{if .ReqBody}}, reqBody{{end}})
 	if err != nil {
-        resp.WriteHeader(err.Status)
-        resp.AddHeader("Content-Type", "application/json")
-        resp.Write([]byte(`{"error":"`+err.Error()+`"}`))
-        return
-    }
+		result := make(map[string]string, 1)
+		result["error"] = err.Error()
+		resp.WriteHeaderAndEntity(err.Status, result)
+		return
+	}
 	
 	for k, v := range respHeader {
 		resp.AddHeader(k, v)
 	}
 
 	{{- if .RespBody }}
-	resp.AddHeader("Content-Type", "application/json")
-
 	if err := resp.WriteEntity(respBody); err != nil {
-		resp.WriteHeader(500)
-        resp.AddHeader("Content-Type", "application/json")
-        resp.Write([]byte(`{"error":"`+err.Error()+`"}`))
-        return
+		result := make(map[string]string, 1)
+		result["error"] = err.Error()
+		resp.WriteHeaderAndEntity(500, result)
+		return
 	}
 	{{- else}}
 	resp.WriteHeader({{.FirstSuccessRespStatus}})
