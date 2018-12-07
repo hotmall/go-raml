@@ -8,7 +8,7 @@ import (
 
 	"github.com/Jumpscale/go-raml/codegen/apidocs"
 	"github.com/Jumpscale/go-raml/codegen/generator"
-	"github.com/Jumpscale/go-raml/codegen/golang"
+	"github.com/Jumpscale/go-raml/codegen/gorestful"
 	"github.com/Jumpscale/go-raml/codegen/nim"
 	"github.com/Jumpscale/go-raml/codegen/python"
 	"github.com/Jumpscale/go-raml/codegen/tarantool"
@@ -47,7 +47,7 @@ func (s *Server) Generate() error {
 
 	switch s.Lang {
 	case langGo:
-		generator = golang.NewServer(apiDef, s.PackageName, s.APIDocsDir, s.RootImportPath, s.WithMain,
+		generator = gorestful.NewServer(s.Kind, apiDef, s.PackageName, s.APIDocsDir, s.RootImportPath, s.WithMain,
 			s.Dir, s.LibRootURLs)
 	case langPython:
 		generator = python.NewServer(s.Kind, apiDef, s.APIDocsDir, s.Dir, s.WithMain, s.LibRootURLs)
