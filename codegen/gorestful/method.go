@@ -13,10 +13,11 @@ import (
 // defines go method base object
 type method struct {
 	resource.Method
-	ResourcePath string
-	reqBody      string // type of the request body
-	PackageName  string
-	resps        []respBody
+	ResourcePath  string
+	reqBody       string // type of the request body
+	PackageName   string
+	resps         []respBody
+	URIParameters map[string]raml.NamedParameter
 }
 
 func (m method) ReqBody() string {
@@ -81,25 +82,30 @@ func aliasPackage(typeStr string) string {
 
 func newMethod(resMeth resource.Method) *method {
 	var resps []respBody
+
+	methodName := commons.DisplayNameToFuncName(resMeth.DisplayName)
+
 	// creates response body
 	for code, resp := range resMeth.Responses {
 		resp := respBody{
 			Code:     commons.AtoiOrPanic(string(code)),
-			respType: setBodyName(resp.Bodies, resMeth.Endpoint+resMeth.VerbTitle(), commons.RespBodySuffix),
+			respType: setBodyName(resp.Bodies, methodName, commons.RespBodySuffix),
 		}
 		if resp.respType != "" {
 			resps = append(resps, resp)
 		}
 	}
 
-	// normalized endpoint
-	normalizedEndpoint := commons.NormalizeURITitle(resMeth.Endpoint)
+	// copy uri parameters
+	URIParameters := make(map[string]raml.NamedParameter)
+	copyURIParameters(URIParameters, resMeth.Resource)
 
 	return &method{
-		Method:       resMeth,
-		ResourcePath: commons.ParamizingURI(resMeth.Endpoint, "+"),
-		reqBody:      setBodyName(resMeth.Bodies, normalizedEndpoint+resMeth.VerbTitle(), commons.ReqBodySuffix),
-		resps:        resps,
+		Method:        resMeth,
+		ResourcePath:  commons.ParamizingURI(resMeth.Endpoint, "+"),
+		reqBody:       setBodyName(resMeth.Bodies, methodName, commons.ReqBodySuffix),
+		resps:         resps,
+		URIParameters: URIParameters,
 	}
 }
 
@@ -140,6 +146,14 @@ func (m method) firstSuccessRespBodyType() string {
 		return ""
 	}
 	return resps[0].Type()
+}
+
+func (m method) FirstSuccessRespStatus() int {
+	resps := m.SuccessRespBodyTypes()
+	if len(resps) == 0 {
+		return 204
+	}
+	return resps[0].Code
 }
 
 func (m method) firstSuccessRespBodyRawType() string {
