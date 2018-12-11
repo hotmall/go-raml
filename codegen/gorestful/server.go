@@ -21,6 +21,8 @@ var (
 	globAPIDef *raml.APIDefinition
 
 	globLibRootURLs []string
+
+	globKind string
 )
 
 // Server represents a Go server
@@ -36,13 +38,14 @@ type Server struct {
 }
 
 // NewServer creates a new Golang server
-func NewServer(apiDef *raml.APIDefinition, packageName, apiDocsDir, rootImportPath string,
+func NewServer(kind string, apiDef *raml.APIDefinition, packageName, apiDocsDir, rootImportPath string,
 	withMain bool, targetDir string, libsRootURLs []string) *Server {
 	// global variables
 	rootImportPath = setRootImportPath(rootImportPath, targetDir)
 	globAPIDef = apiDef
 	globRootImportPath = rootImportPath
 	globLibRootURLs = libsRootURLs
+	globKind = kind
 
 	return &Server{
 		apiDef:         apiDef,
@@ -82,6 +85,10 @@ func (gs *Server) Generate() error {
 		return err
 	}
 
+	if err := generateErrorStruct(gs.apiDef, gs.TargetDir); err != nil {
+		return err
+	}
+
 	// security scheme
 	if err := generateSecurity(gs.apiDef.SecuritySchemes, gs.TargetDir, gs.PackageName); err != nil {
 		log.Errorf("failed to generate security scheme:%v", err)
@@ -100,11 +107,6 @@ func (gs *Server) Generate() error {
 		return err
 	}
 
-	// routes
-	if err := commons.GenerateFile(gs, "./templates/golang/server_routes.tmpl", "server_routes", filepath.Join(gs.TargetDir, "routes.go"), true); err != nil {
-		return err
-	}
-
 	// generate main
 	if gs.withMain {
 		// HTML front page
@@ -112,7 +114,7 @@ func (gs *Server) Generate() error {
 			return err
 		}
 		// main file
-		return commons.GenerateFile(gs, "./templates/golang/server_main_go.tmpl", "server_main_go", filepath.Join(gs.TargetDir, "main.go"), true)
+		return commons.GenerateFile(gs, "./templates/golang/gorestful_main.tmpl", "gorestful_main", filepath.Join(gs.TargetDir, "main.go"), true)
 	}
 
 	return nil
@@ -123,7 +125,7 @@ func (gs Server) Title() string {
 	return gs.apiDef.Title
 }
 
-// RouteImports returns all import packages
+// RouteImports returns all resources routes
 func (gs Server) RouteImports() []string {
 	imports := make(map[string]struct{})
 
