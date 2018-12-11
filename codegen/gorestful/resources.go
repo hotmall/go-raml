@@ -16,6 +16,9 @@ const (
 
 const (
 	serverAPIDir = "handlers" // dir on which we put our server API implementation
+	serviceDir   = "service"  // dir on which we put our service
+	delegateDir  = "delegate" // dir on which we put our delegate
+	resourceDir  = "resource" // dir on which we put our resource
 )
 
 type goResource struct {
