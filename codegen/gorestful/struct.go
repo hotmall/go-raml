@@ -96,12 +96,14 @@ func generateAllStructs(apiDef *raml.APIDefinition, dir string) error {
 			// need to change this Req/Resp body name
 			// to simply use methodName
 			// it will break compatibility!
-			name := commons.NormalizeURITitle(tip.Endpoint.Addr)
-			name = name[len(tip.Endpoint.ResourceName()):] + strings.Title(strings.ToLower(tip.Endpoint.Verb))
+			// TODO: jzlei
+			// name := commons.NormalizeURITitle(tip.Endpoint.Addr)
+			// name = name[len(tip.Endpoint.ResourceName()):] + strings.Title(strings.ToLower(tip.Endpoint.Verb))
+			name := serverMethodName(tip.Endpoint.Addr, tip.Endpoint.Method.DisplayName, tip.Endpoint.Method.Name, tip.Endpoint.ResourceName())
 			if tip.ReqResp == types.HTTPRequest {
-				name += "ReqBody"
+				name += commons.ReqBodySuffix
 			} else {
-				name += "RespBody"
+				name += commons.RespBodySuffix
 			}
 			sd := newStructDef(apiDef, name, pkgName, tip.Description, tip.Properties)
 			if err := sd.generate(dir); err != nil {
