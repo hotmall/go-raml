@@ -88,6 +88,7 @@ func GenerateFile(data interface{}, tmplFile, tmplName, filename string, overrid
 	// pass Go function to template
 	funcMap := template.FuncMap{
 		"ToLower": strings.ToLower,
+		"Title":   strings.Title,
 	}
 
 	// all template files path is relative to current directory (./)
