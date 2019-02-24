@@ -113,6 +113,10 @@ func (gs *Server) Generate() error {
 		if err := commons.GenerateFile(gs, "./templates/index.html.tmpl", "index.html", filepath.Join(gs.TargetDir, "index.html"), false); err != nil {
 			return err
 		}
+		// .gitignore file
+		if err := commons.GenerateFile(gs, "./templates/gorestful_gitignore.tmpl", ".gitignore", filepath.Join(gs.TargetDir, ".gitignore"), false); err != nil {
+			return err
+		}
 		// main file
 		return commons.GenerateFile(gs, "./templates/golang/gorestful_main.tmpl", "gorestful_main", filepath.Join(gs.TargetDir, "main.go"), true)
 	}
