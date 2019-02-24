@@ -23,6 +23,6 @@ func (r {{$resourceName}}Resource) {{$v.MethodName}}(reqContext types.{{$v.Metho
 func init() {
     r := new({{.Name}}Resource)
     ws := service.New{{.Name}}Service(r)
-    restful.Add(ws.WebService)
+    restful.Add(ws)
 }
 {{end -}}

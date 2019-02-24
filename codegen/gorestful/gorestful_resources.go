@@ -78,7 +78,7 @@ func (gr *goResource) generateService(dir string) error {
 	// Generate resource
 	filename = filepath.Join(dir+"/"+resourceDir, strings.ToLower(gr.Name)+"_resource") + ".go"
 	if err := commons.GenerateFile(gr, "./templates/golang/gorestful_resource.tmpl",
-		"gorestful_resource_template", filename, true); err != nil {
+		"gorestful_resource_template", filename, false); err != nil {
 		return err
 	}
 

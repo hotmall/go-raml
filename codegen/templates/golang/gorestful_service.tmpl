@@ -10,16 +10,17 @@ import (
 {{$apiName := .Name}}
 // {{.Name}}Service is Service implementation of {{.Endpoint}} root endpoint
 type {{.Name}}Service struct {
-	*restful.WebService
 	delegator delegate.{{.Name}}Delegate
 }
 
 // New{{.Name}}Service create {{.Name}}Service object
-func New{{.Name}}Service(delegator delegate.{{.Name}}Delegate) *{{.Name}}Service {
-	ws := &{{.Name}}Service{
+func New{{.Name}}Service(delegator delegate.{{.Name}}Delegate) *restful.WebService {
+	s := &{{.Name}}Service{
 		WebService: new(restful.WebService),
 		delegator: delegator,
 	}
+
+	ws := new(restful.WebService)
 
 	ws.
 		Path("{{.APIDef.BaseURI}}").
@@ -27,7 +28,7 @@ func New{{.Name}}Service(delegator delegate.{{.Name}}Delegate) *{{.Name}}Service
 		Produces("{{.APIDef.MediaType}}")
 
 	{{ range $k, $v := .Methods }}
-	ws.Route(ws.{{$v.Verb}}("{{$v.Endpoint}}").To(ws.{{$v.MethodName}}))
+	ws.Route(ws.{{$v.Verb}}("{{$v.Endpoint}}").To(s.{{$v.MethodName}}))
 	{{- end}}
 
 	return ws
