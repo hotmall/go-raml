@@ -102,6 +102,9 @@ func (gm serverMethod) Imports() []string {
 	for lib := range gm.libImported(globRootImportPath) {
 		ip[lib] = struct{}{}
 	}
+	if globKind == "gorestful" {
+		ip[`"`+globRootImportPath+"/delegate"+`"`] = struct{}{}
+	}
 	return commons.MapToSortedStrings(ip)
 }
 
