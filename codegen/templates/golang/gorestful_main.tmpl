@@ -5,19 +5,41 @@ package {{.PackageName}}
 import (
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 
-    "{{.RootImportPath}}/goraml"
-    _ "{{.RootImportPath}}/resource"
+	"{{.RootImportPath}}/goraml"
+	_ "{{.RootImportPath}}/resource"
 
-    "gopkg.in/validator.v2"
+	"gopkg.in/validator.v2"
 )
 
 func main() {
-    // input validator
-    validator.SetValidationFunc("multipleOf", goraml.MultipleOf)
+	// input validator
+	validator.SetValidationFunc("multipleOf", goraml.MultipleOf)
 
-	log.Println("starting server")
-    log.Fatal(http.ListenAndServe(":5000", nil))
+	// Set up channel on which to send signal notifications.
+	quitChan := make(chan os.Signal, 1)
+	signal.Notify(quitChan, os.Interrupt, os.Kill)
+	
+	server := &http.Server{
+		Addr:    ":5000",
+		Handler: nil,
+	}
+	
+	log.Println("starting server...")
+	go func() {
+		err := server.ListenAndServe()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	// Block until interrupt signal is received.
+	quitSignal := <-quitChan
+	log.Println("Get signal:", quitSignal)
+	server.Close()
 }
 
 {{- end -}}
+
