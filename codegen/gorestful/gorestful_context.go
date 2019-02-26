@@ -90,6 +90,28 @@ func copyURIParameters(context map[string]raml.NamedParameter, resource *raml.Re
 	}
 }
 
+func copyHeaders(headers map[string]raml.NamedParameter, method *serverMethod) {
+	if method == nil {
+		return
+	}
+
+	for key, value := range method.Headers {
+		name := fmt.Sprintf("%s", key)
+		headers[name] = raml.NamedParameter{
+			Name:        value.Name,
+			DisplayName: value.DisplayName,
+			Type:        value.Type,
+			Pattern:     value.Pattern,
+			MinLength:   value.MinLength,
+			MaxLength:   value.MaxLength,
+			Minimum:     value.Minimum,
+			Maximum:     value.Maximum,
+			Repeat:      value.Repeat,
+			Required:    value.Required,
+		}
+	}
+}
+
 type goContext struct {
 	Name        string              // context's name
 	PackageName string              // package name
@@ -105,9 +127,7 @@ func newGoContext(method *serverMethod) *goContext {
 		parameters[name] = param
 	}
 
-	/*for name, header := range method.Headers {
-		parameters[(string)name] := (raml.NamedParameter)header
-	}*/
+	copyHeaders(parameters, method)
 
 	fields := make(map[string]paramDef)
 
