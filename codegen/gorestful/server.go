@@ -118,7 +118,7 @@ func (gs *Server) Generate() error {
 			return err
 		}
 		// main file
-		return commons.GenerateFile(gs, "./templates/golang/gorestful_main.tmpl", "gorestful_main", filepath.Join(gs.TargetDir, "main.go"), true)
+		return commons.GenerateFile(gs, "./templates/golang/gorestful_main.tmpl", "gorestful_main", filepath.Join(gs.TargetDir, "main.go"), false)
 	}
 
 	return nil
