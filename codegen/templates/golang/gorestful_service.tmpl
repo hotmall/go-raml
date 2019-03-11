@@ -44,7 +44,14 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 	{{$kq}} := req.QueryParameter("{{$kq}}")
 	{{- if eq $vq.Type "integer"}}
 	if {{$kq}} != "" {
-		reqContext.{{$kq|Title}}, _ = strconv.Atoi({{$kq}})
+		i, err := strconv.Atoi({{$kq}})
+		if err != nil {
+			result := make(map[string]string, 1)
+			result["error"] = err.Error()
+			resp.WriteHeaderAndEntity(400, result)
+			return
+		}
+		reqContext.{{$kq|Title}} = i
 	}
 	{{- else}}
 	reqContext.{{$kq|Title}} = {{$kq}}
@@ -55,7 +62,14 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 	{{$kq}} := req.PathParameter("{{$kq}}")
 	{{- if eq $vq.Type "integer"}}
 	if {{$kq}} != "" {
-		reqContext.{{$kq|Title}} = strconv.Atoi({{$kq}})
+		i, err := strconv.Atoi({{$kq}})
+		if err != nil {
+			result := make(map[string]string, 1)
+			result["error"] = err.Error()
+			resp.WriteHeaderAndEntity(400, result)
+			return
+		}
+		reqContext.{{$kq|Title}} = i
 	}
 	{{- else}}
 	reqContext.{{$kq|Title}} = {{$kq}}
@@ -66,7 +80,14 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 	{{$kq}} := req.HeaderParameter("{{$kq}}")
 	{{- if eq $vq.Type "integer"}}
 	if {{$kq}} != "" {
-		reqContext.{{$kq|Title}} = strconv.Atoi({{$kq}})
+		i, err := strconv.Atoi({{$kq}})
+		if err != nil {
+			result := make(map[string]string, 1)
+			result["error"] = err.Error()
+			resp.WriteHeaderAndEntity(400, result)
+			return
+		}
+		reqContext.{{$kq|Title}} = i
 	}
 	{{- else}}
 	reqContext.{{$kq|printf "%s"|Title}} = {{$kq}}
