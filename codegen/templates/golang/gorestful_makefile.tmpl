@@ -1,0 +1,35 @@
+{{- define "gorestful_makefile" -}}
+PACKAGES = $(shell go list ./... | grep -v '/vendor/' | grep -v '/delegate' | grep -v '/goraml' | grep -v '/service' | grep -v '/types')
+
+PACKAGE = {{.RootImportPath}}
+SERVICE_NAME = $(shell dirname $(PACKAGE) | xargs basename)
+
+BUILD_DATE = $(shell date +%FT%T%z)
+BUILD = $(shell date -d "$(BUILD_DATE)" +%Y%m%d.%H%M%S)
+
+COMMIT_HASH = $(shell git rev-parse --short HEAD 2>/dev/null)
+SERVICE_VERSION = $(shell cat VERSION)
+
+
+LDFLAGS = -X $(PACKAGE)/commands.CommitHash=$(COMMIT_HASH) -X $(PACKAGE)/commands.BuildDate=$(BUILD_DATE) -s -w
+
+all: build test zip
+
+build:
+	go generate
+	go build -o ../runtime/bin/$(SERVICE_NAME) -v -ldflags '$(LDFLAGS)'
+
+clean:
+	rm -rf delegate
+	rm -rf goraml
+	rm -rf service
+	rm -rf types
+	rm ../runtime/bin/$(SERVICE_NAME)
+
+test:
+	go test $(PACKAGES) -args -p ../runtime
+
+zip: build
+	cd ../runtime && zip -r ../dist/$(SERVICE_NAME)-$(SERVICE_VERSION).$(BUILD).zip .
+
+{{end -}}
