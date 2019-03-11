@@ -114,7 +114,11 @@ func (gs *Server) Generate() error {
 			return err
 		}
 		// .gitignore file
-		if err := commons.GenerateFile(gs, "./templates/golang/gorestful_gitignore.tmpl", ".gitignore", filepath.Join(gs.TargetDir, ".gitignore"), false); err != nil {
+		if err := commons.GenerateFile(gs, "./templates/golang/gorestful_gitignore.tmpl", "gorestful_gitignore", filepath.Join(gs.TargetDir, ".gitignore"), false); err != nil {
+			return err
+		}
+		// Makefile
+		if err := commons.GenerateFile(gs, "./templates/golang/gorestful_makefile.tmpl", "gorestful_makefile", filepath.Join(gs.TargetDir, "Makefile"), false); err != nil {
 			return err
 		}
 		// main file
