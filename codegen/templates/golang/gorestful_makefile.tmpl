@@ -9,15 +9,15 @@ BUILD = $(shell date -d "$(BUILD_DATE)" +%Y%m%d.%H%M%S)
 
 COMMIT_HASH = $(shell git rev-parse --short HEAD 2>/dev/null)
 SERVICE_VERSION = $(shell cat VERSION)
+GO_VERSION = $(shell go version)
 
-
-LDFLAGS = -X $(PACKAGE)/commands.CommitHash=$(COMMIT_HASH) -X $(PACKAGE)/commands.BuildDate=$(BUILD_DATE) -s -w
+LDFLAGS = -X main.Version=$(SERVICE_VERSION) -X main.CommitHash=$(COMMIT_HASH) -X main.BuildDate=$(BUILD_DATE) -X "main.GoVersion=${GO_VERSION}" -s -w
 
 all: build test zip
 
 build:
 	go generate
-	go build -o ../runtime/bin/$(SERVICE_NAME) -v -ldflags '$(LDFLAGS)'
+	go build -v -ldflags '$(LDFLAGS)'
 
 clean:
 	rm -rf delegate
@@ -30,6 +30,7 @@ test:
 	go test $(PACKAGES) -args -p ../runtime
 
 zip: build
+	cp -p code ../runtime/bin/$(SERVICE_NAME)
 	cd ../runtime && zip -r ../dist/$(SERVICE_NAME)-$(SERVICE_VERSION).$(BUILD).zip .
 
 {{end -}}
