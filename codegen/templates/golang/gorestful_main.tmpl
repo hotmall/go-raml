@@ -3,10 +3,13 @@
 package {{.PackageName}}
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	
+	"github.com/mallbook/commandline"
 
 	"{{.RootImportPath}}/goraml"
 	_ "{{.RootImportPath}}/resource"
@@ -14,7 +17,41 @@ import (
 	"gopkg.in/validator.v2"
 )
 
+var (
+	//Version define software version
+	Version string
+	// CommitHash represents the Git commit hash at built time
+	CommitHash string
+	// BuildDate represents the date when this tool was built
+	BuildDate string
+	// GoVersion represents go version
+	GoVersion string
+)
+
 func main() {
+	if commandline.IsShowHelp() {
+		commandline.Usage()
+		os.Exit(0)
+	}
+
+	if commandline.IsShowVersion() {
+		showVersion()
+		os.Exit(0)
+	}
+
+	if s, err := commandline.Signal(); err == nil {
+		switch s {
+		case commandline.StopSignal:
+			commandline.Exit()
+		case commandline.KillSignal:
+			commandline.Kill()
+		default:
+		}
+		os.Exit(0)
+	}
+
+	commandline.WriteProcID()
+	
 	// input validator
 	validator.SetValidationFunc("multipleOf", goraml.MultipleOf)
 
@@ -39,6 +76,12 @@ func main() {
 	quitSignal := <-quitChan
 	log.Println("Get signal:", quitSignal)
 	server.Close()
+}
+
+// ShowVersion print version infomation
+func showVersion() {
+	fmt.Printf("Version\t\t: v%v\nCommit Hash\t: %v\nBuild Date\t: %v\n\n%v\n",
+		Version, CommitHash, BuildDate, GoVersion)
 }
 
 {{- end -}}
