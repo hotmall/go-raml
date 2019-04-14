@@ -38,18 +38,23 @@ func NewClient(apiDef *raml.APIDefinition, packageName, rootImportPath, targetDi
 	globAPIDef = apiDef
 	globLibRootURLs = libsRootURLs
 
+	baseURI := apiDef.BaseURI
+	if strings.Index(baseURI, "{version}") > 0 {
+		baseURI = strings.Replace(baseURI, "{version}", apiDef.Version, -1)
+	}
+
 	// creates client services objects
 	services := map[string]*ClientService{}
 	for endpoint, res := range apiDef.Resources {
 		rd := resource.New(apiDef, &res, commons.NormalizeURITitle(endpoint), true)
-		services[endpoint] = newClientService(endpoint, packageName, &rd)
+		services[endpoint] = newClientService(endpoint, packageName, baseURI, &rd)
 	}
 
 	// creates client object
 	client := Client{
 		apiDef:         apiDef,
 		Name:           commons.NormalizeIdentifier(commons.NormalizeURI(apiDef.Title)),
-		BaseURI:        apiDef.BaseURI,
+		BaseURI:        baseURI,
 		libraries:      apiDef.Libraries,
 		PackageName:    packageName,
 		RootImportPath: rootImportPath,
@@ -58,9 +63,6 @@ func NewClient(apiDef *raml.APIDefinition, packageName, rootImportPath, targetDi
 		libsRootURLs:   libsRootURLs,
 	}
 
-	if strings.Index(client.BaseURI, "{version}") > 0 {
-		client.BaseURI = strings.Replace(client.BaseURI, "{version}", apiDef.Version, -1)
-	}
 	return client, nil
 }
 
@@ -96,22 +98,23 @@ func (gc Client) Generate() error {
 		return err
 	}
 
-	if err := gc.generateServices(gc.TargetDir); err != nil {
-		return err
-	}
-	return gc.generateClientFile(gc.TargetDir)
+	// if err := gc.generateServices(gc.TargetDir); err != nil {
+	// 	return err
+	// }
+	// return gc.generateClientFile(gc.TargetDir)
+	return gc.generateServices(gc.TargetDir)
 }
 
 // generate Go client helper
 func (gc *Client) generateHelperFile(dir string) error {
 	fileName := filepath.Join(dir, "/client_utils.go")
-	return commons.GenerateFile(gc, "./templates/golang/client_utils_go.tmpl", "client_utils_go", fileName, true)
+	return commons.GenerateFile(gc, "./templates/golang/grequests_client_utils.tmpl", "grequests_client_utils", fileName, true)
 }
 
 func (gc *Client) generateServices(dir string) error {
 	for _, s := range gc.Services {
 		//sort.Sort(resource.ByEndpoint(s.Methods))
-		if err := commons.GenerateFile(s, "./templates/golang/client_service_go.tmpl", "client_service_go", s.filename(dir), true); err != nil {
+		if err := commons.GenerateFile(s, "./templates/golang/grequests_client_api.tmpl", "grequests_client_api", s.filename(dir), true); err != nil {
 			return err
 		}
 	}
@@ -139,6 +142,6 @@ func (gc *Client) generateSecurity(dir string) error {
 
 // generate Go client lib file
 func (gc *Client) generateClientFile(dir string) error {
-	fileName := filepath.Join(dir, "/client_"+strings.ToLower(gc.Name)+".go")
-	return commons.GenerateFile(gc, "./templates/golang/client_go.tmpl", "client_go", fileName, true)
+	fileName := filepath.Join(dir, strings.ToLower(gc.Name)+"_api.go")
+	return commons.GenerateFile(gc, "./templates/golang/grequests_client_api.tmpl", "grequests_client_api", fileName, true)
 }

@@ -25,6 +25,7 @@ type goResource struct {
 	*resource.Resource
 	Methods     []serverMethod
 	PackageName string
+	BaseURI     string
 }
 
 func newGoResource(rd *resource.Resource, packageName string) *goResource {
@@ -32,10 +33,17 @@ func newGoResource(rd *resource.Resource, packageName string) *goResource {
 	for _, rm := range rd.Methods {
 		methods = append(methods, newServerMethod(rm, rd.APIDef, rd))
 	}
+
+	baseURI := rd.APIDef.BaseURI
+	if strings.Index(baseURI, "{version}") > 0 {
+		baseURI = strings.Replace(baseURI, "{version}", rd.APIDef.Version, -1)
+	}
+
 	return &goResource{
 		Resource:    rd,
 		Methods:     methods,
 		PackageName: packageName,
+		BaseURI:     baseURI,
 	}
 }
 

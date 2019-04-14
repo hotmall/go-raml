@@ -1,7 +1,7 @@
 package codegen
 
 import (
-	"github.com/Jumpscale/go-raml/codegen/golang"
+	"github.com/Jumpscale/go-raml/codegen/gorestful"
 	"github.com/Jumpscale/go-raml/codegen/nim"
 	"github.com/Jumpscale/go-raml/codegen/python"
 	"github.com/Jumpscale/go-raml/raml"
@@ -24,7 +24,7 @@ type ClientConfig struct {
 func GenerateClient(apiDef *raml.APIDefinition, conf ClientConfig) error {
 	switch conf.Lang {
 	case langGo:
-		gc, err := golang.NewClient(apiDef, conf.PackageName, conf.RootImportPath, conf.Dir,
+		gc, err := gorestful.NewClient(apiDef, conf.PackageName, conf.RootImportPath, conf.Dir,
 			conf.LibRootURLs)
 		if err != nil {
 			return err

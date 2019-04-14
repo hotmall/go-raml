@@ -12,10 +12,11 @@ import (
 type ClientService struct {
 	resource.ClientService
 	PackageName string
+	BaseURI     string
 	Methods     []clientMethod
 }
 
-func newClientService(rootEndpoint, packageName string, rd *resource.Resource) *ClientService {
+func newClientService(rootEndpoint, packageName, baseURI string, rd *resource.Resource) *ClientService {
 	var methods []clientMethod
 
 	for _, rm := range rd.Methods {
@@ -28,6 +29,7 @@ func newClientService(rootEndpoint, packageName string, rd *resource.Resource) *
 	return &ClientService{
 		ClientService: cs,
 		PackageName:   packageName,
+		BaseURI:       baseURI,
 		Methods:       methods,
 	}
 }

@@ -22,7 +22,7 @@ func New{{.Name}}Service(delegator delegate.{{.Name}}Delegate) *restful.WebServi
 	ws := new(restful.WebService)
 
 	ws.
-		Path("{{.APIDef.BaseURI}}").
+		Path("{{.BaseURI}}").
 		Consumes("{{.APIDef.MediaType}}").
 		Produces("{{.APIDef.MediaType}}")
 

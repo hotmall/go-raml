@@ -23,8 +23,8 @@ func NewClientService(rootEndpoint, displayName string) ClientService {
 		normalized = commons.DisplayNameToFuncName(displayName)
 	}
 	return ClientService{
-		Name:          strings.Title(normalized) + "Service",
+		Name:          strings.Title(normalized) + "API",
 		EndpointName:  normalized,
-		FilenameNoExt: normalized + "_service",
+		FilenameNoExt: strings.ToLower(normalized) + "_api",
 	}
 }

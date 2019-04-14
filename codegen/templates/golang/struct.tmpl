@@ -13,6 +13,7 @@ import (
 {{ if .OneLineDef -}}
 {{ .OneLineDef }}
 {{- else -}}
+// {{ .Name }} represents a structure
 type {{ .Name }} struct {
     {{ range $key, $value := .Fields }}
         {{$value.Name}}  {{if eq $value.IsComposition false}} {{$value.Type}} `json:"{{$key}}{{if eq $value.IsOmitted true}},omitempty{{end}}"{{if $value.Validators}} validate:"{{$value.Validators}}"{{end}}` {{end}}
@@ -21,6 +22,7 @@ type {{ .Name }} struct {
 {{- end}}
 
 {{ if .NotBareInterface}}
+// Validate check if the data is legal
 func (s {{.Name}}) Validate() error {
     {{/* field level validation */}}
     {{ range $k, $v := .Fields }}

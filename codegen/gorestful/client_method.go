@@ -38,7 +38,7 @@ func (gcm *clientMethod) setup(methodName string) {
 		}
 
 		// append header
-		params = append(params, "headers,queryParams map[string]interface{}")
+		params = append(params, "headers,queryParams map[string]string")
 
 		return strings.Join(params, ", ")
 	}
