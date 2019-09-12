@@ -18,6 +18,7 @@ all: build test zip
 build:
 	go generate
 	go build -v -ldflags '$(LDFLAGS)'
+	mv -f code ../runtime/bin/$(SERVICE_NAME)
 
 clean:
 	rm -rf delegate
@@ -30,7 +31,6 @@ test:
 	go test $(PACKAGES) -args -p ../runtime
 
 zip: build
-	cp -p code ../runtime/bin/$(SERVICE_NAME)
 	cd ../runtime && zip -r ../dist/$(SERVICE_NAME)-$(SERVICE_VERSION).$(BUILD).zip .
 
 {{end -}}
