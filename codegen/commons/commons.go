@@ -16,6 +16,7 @@ import (
 
 	"github.com/Jumpscale/go-raml/codegen/templates"
 	"github.com/Jumpscale/go-raml/raml"
+	"github.com/Jumpscale/go-raml/utils"
 )
 
 var (
@@ -87,8 +88,10 @@ func GenerateFile(data interface{}, tmplFile, tmplName, filename string, overrid
 
 	// pass Go function to template
 	funcMap := template.FuncMap{
-		"ToLower": strings.ToLower,
-		"Title":   strings.Title,
+		"ToLower":           strings.ToLower,
+		"Title":             strings.Title,
+		"Camelize":          utils.Camelize,
+		"CamelizeDownFirst": utils.CamelizeDownFirst,
 	}
 
 	// all template files path is relative to current directory (./)

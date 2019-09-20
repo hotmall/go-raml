@@ -6,6 +6,7 @@ import (
 
 	"github.com/Jumpscale/go-raml/codegen/commons"
 	"github.com/Jumpscale/go-raml/raml"
+	"github.com/Jumpscale/go-raml/utils"
 )
 
 // FieldDef defines a field of a struct
@@ -129,9 +130,5 @@ func (fd *fieldDef) buildValidators(p raml.Property) {
 // - Title it
 // - replace '-' with camel case version
 func formatFieldName(name string) string {
-	var formatted string
-	for _, v := range strings.Split(name, "-") {
-		formatted += strings.Title(v)
-	}
-	return formatted
+	return utils.Camelize(name)
 }
