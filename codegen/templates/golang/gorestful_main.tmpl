@@ -59,12 +59,13 @@ func main() {
 	quitChan := make(chan os.Signal, 1)
 	signal.Notify(quitChan, os.Interrupt, os.Kill)
 	
+	addr := fmt.Sprintf("localhost:%d", commandline.Port())
 	server := &http.Server{
-		Addr:    ":5000",
+		Addr:    addr,
 		Handler: nil,
 	}
 	
-	log.Println("starting server...")
+	log.Printf("starting server, listen on %s\n", addr)
 	go func() {
 		err := server.ListenAndServe()
 		if err != nil {
