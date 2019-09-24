@@ -15,7 +15,7 @@ type {{.Name}}Resource struct {
 {{$resourceName := .Name}}
 {{- range $k, $v := .Methods}}
 // {{$v.MethodName}} is the handler for {{$v.Verb}} {{$v.Endpoint}}
-func (r {{$resourceName}}Resource) {{$v.MethodName}}(reqContext types.{{$v.MethodName}}Context{{if .ReqBody}}, reqBody {{.ReqBody}}{{end}}) (respHeader map[string]string{{if .RespBody}}, respBody {{.RespBody}}{{end}}, e *types.Error) {
+func (r {{$resourceName}}Resource) {{$v.MethodName}}(reqContext *types.{{$v.MethodName}}Context{{if .ReqBody}}, reqBody {{.ReqBody}}{{end}}) (respHeader map[string]string{{if .RespBody}}, respBody {{.RespBody}}{{end}}, e *types.Error) {
     return
 }
 {{end}}
