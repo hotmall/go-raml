@@ -8,9 +8,17 @@ import (
 
 // {{.Name}}Context is the context of method {{.Name}}
 type {{.Name}}Context struct {
+    Headers map[string]string `json:"headers" validate:"nonzero"`
     {{- range $key, $value := .Fields }}
         {{$value.Name}} {{if eq $value.IsComposition false}} {{$value.Type}} `json:"{{$key}}{{if eq $value.IsOmitted true}},omitempty{{end}}"{{if $value.Validators}} validate:"{{$value.Validators}}"{{end}}` {{end}}
     {{- end -}}
+}
+
+// New{{.Name}}Context new an context instance
+func New{{.Name}}Context() *{{.Name}}Context {
+    return &{{.Name}}Context {
+        Headers: make(map[string]string),
+    }
 }
 
 // Validate check if the data is legal
