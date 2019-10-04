@@ -8,7 +8,7 @@ import (
 
 // {{.Name}}Context is the context of method {{.Name}}
 type {{.Name}}Context struct {
-    Headers map[string]string `json:"headers" validate:"nonzero"`
+    Headers map[string]string `json:"headers" validate:"nonnil"`
     {{- range $key, $value := .Fields }}
         {{$value.Name}} {{if eq $value.IsComposition false}} {{$value.Type}} `json:"{{$key}}{{if eq $value.IsOmitted true}},omitempty{{end}}"{{if $value.Validators}} validate:"{{$value.Validators}}"{{end}}` {{end}}
     {{- end -}}
