@@ -18,9 +18,9 @@ type {{$apiName}} struct {
 }
 
 // New{{$apiName}} new an API object
-func New{{$apiName}}() {{$apiName}} {
+func New{{$apiName}}(host string) {{$apiName}} {
     return {{$apiName}}{
-        baseURI: "{{.BaseURI}}",
+        baseURI: host+"{{.BaseURI}}",
     }
 }
 
