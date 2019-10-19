@@ -328,7 +328,7 @@ func postProcessParamURI(uri, sep string) string {
 		if strings.HasPrefix(elem, `"`) {
 			continue
 		}
-		arrs[i] = NormalizeIdentifier(elem)
+		arrs[i] = utils.CamelizeDownFirst(elem)
 	}
 	return strings.Join(arrs, sep)
 }

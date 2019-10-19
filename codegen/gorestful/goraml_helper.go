@@ -19,6 +19,8 @@ type goramlHelper struct {
 	rootImportPath string // only used by server
 	packageName    string
 	packageDir     string
+	command        string
+	kind           string
 }
 
 func (gh goramlHelper) generate(dir string) error {
@@ -43,9 +45,16 @@ func (gh goramlHelper) generate(dir string) error {
 	}{
 		PackageName: gh.packageName,
 	}
-	if err := commons.GenerateFile(ctx, "./templates/golang/goraml_go_api_error.tmpl", "goraml_go_api_error",
-		filepath.Join(pkgDir, "api_error.go"), true); err != nil {
-		return err
+	if gh.command == "client" && gh.kind == "requests" {
+		if err := commons.GenerateFile(ctx, "./templates/golang/requests_go_api_error.tmpl", "requests_go_api_error",
+			filepath.Join(pkgDir, "api_error.go"), true); err != nil {
+			return err
+		}
+	} else {
+		if err := commons.GenerateFile(ctx, "./templates/golang/goraml_go_api_error.tmpl", "goraml_go_api_error",
+			filepath.Join(pkgDir, "api_error.go"), true); err != nil {
+			return err
+		}
 	}
 	return nil
 }

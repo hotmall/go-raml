@@ -38,10 +38,6 @@ func serverMethodName(endpoint, displayName, verb, resName string) string {
 	return name[len(resName):] + verb
 }
 
-func (gm serverMethod) RespBody() string {
-	return gm.firstSuccessRespBodyType()
-}
-
 func (gm serverMethod) Route() string {
 	return strings.Replace(gm.Endpoint, resource.CatchAllRoute, muxCatchAllRoute, 1)
 }

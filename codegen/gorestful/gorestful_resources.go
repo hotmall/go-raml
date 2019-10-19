@@ -54,8 +54,8 @@ func (gr *goResource) ResourceImporters() []string {
 
 func (gr *goResource) generateService(dir string) error {
 	// Generate method context
-	for _, method := range gr.Methods {
-		gc := newGoContext(&method)
+	for _, m := range gr.Methods {
+		gc := newGoContext(m.method)
 		if err := gc.generate(dir); err != nil {
 			return err
 		}
