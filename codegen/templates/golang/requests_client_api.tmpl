@@ -72,13 +72,14 @@ func (s {{$apiName}}) {{$v.MethodName}}(reqContext *types.{{$v.MethodName}}Conte
         return
     }
 
+    respHeader = make(requests.Header, len(resp.Header))
+    for hk, hv := range resp.Header {
+        respHeader[hk] = hv
+    }
+
     if resp.StatusCode != {{.FirstSuccessRespStatus}} {
         err = goraml.NewAPIError(resp, nil)
         return
-    }
-
-    for hk, hv := range resp.Header {
-        respHeader[hk] = hv
     }
 
     {{ if $v.HasRespBody }}
