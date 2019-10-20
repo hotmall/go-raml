@@ -86,7 +86,12 @@ func (s {{$apiName}}) {{$v.MethodName}}(reqContext *types.{{$v.MethodName}}Conte
     }
 
     if resp.StatusCode != {{.FirstSuccessRespStatus}} {
-        err = goraml.NewAPIError(resp, nil)
+        data := goraml.BasicError{}
+        err = goraml.NewAPIError(resp, &data)
+        e := err.(goraml.APIError)
+        if e.Message != nil {
+            err = data
+        }
         return
     }
 

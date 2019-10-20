@@ -8,6 +8,16 @@ import (
 	"github.com/hotmall/requests"
 )
 
+// BasicError represents common error info
+type BasicError struct {
+	Data string `json:"error"`
+}
+
+// Error implements error interface
+func (e BasicError) Error() string {
+	return e.Data
+}
+
 // APIError represents any error condition that returned by API server.
 // i.e. non 2xx status code
 type APIError struct {
