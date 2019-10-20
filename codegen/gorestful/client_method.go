@@ -94,6 +94,25 @@ func (gcm clientMethod) needImportGoraml() bool {
 	return gcm.HasRespBody()
 }
 
+func (gcm clientMethod) needImportStrconv() bool {
+	for _, p := range gcm.QueryParameters {
+		if p.Type != "string" {
+			return true
+		}
+	}
+	for _, up := range gcm.URIParameters {
+		if up.Type != "string" {
+			return true
+		}
+	}
+	for _, h := range gcm.Headers {
+		if h.Type != "string" {
+			return true
+		}
+	}
+	return false
+}
+
 func (gcm clientMethod) Route() string {
 	if gcm.ResourcePath == "" {
 		return ""

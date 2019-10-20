@@ -75,7 +75,9 @@ func (cs ClientService) Imports() []string {
 	for _, m := range cs.Methods {
 		if m.needImportGoramlTypes() {
 			imports[`"`+globRootImportPath+"/"+typePackage+`"`] = struct{}{}
-			break
+		}
+		if m.needImportStrconv() {
+			imports[`"strconv"`] = struct{}{}
 		}
 	}
 	return commons.MapToSortedStrings(imports)

@@ -29,19 +29,29 @@ func New{{$apiName}}(host string) {{$apiName}} {
 // {{$v.MethodName}} {{$vf}} {{end}}
 func (s {{$apiName}}) {{$v.MethodName}}(reqContext *types.{{$v.MethodName}}Context{{if .ReqBody}}, reqBody {{.ReqBody}}{{end}}) (respHeader map[string]string{{if .RespBody}}, respBody {{.RespBody}}{{end}}, err error) {
 
-    {{- range $kq, $vq := $v.QueryParameters }}
+    {{$lenParams := len $v.QueryParameters}}
+    {{if gt $lenParams 0}}
         p := make(requests.Params)
+    {{- end}}
+    {{- range $kq, $vq := $v.QueryParameters }}
     {{- if eq $vq.Type "integer"}}
         p["{{$kq}}"] = strconv.Itoa(reqContext.{{$kq|Camelize}})
+    {{- else if eq $vq.Type "boolean"}}
+        p["{{$kq}}"] = strconv.FormatBool(reqContext.{{$kq|Camelize}})
     {{- else}}
         p["{{$kq}}"] = reqContext.{{$kq|Camelize}}
     {{- end}}
     {{- end }}
 
-    {{- range $kq, $vq := $v.Headers }}
+    {{$lenHeader := len $v.Headers}}
+    {{if gt $lenHeader 0}}
         h := make(requests.Header)
+    {{- end}}
+    {{- range $kq, $vq := $v.Headers }}
 	{{- if eq $vq.Type "integer"}}
         h["{{$kq}}"] = strconv.Itoa(reqContext.{{$kq|printf "%s"|Camelize}})
+    {{- else if eq $vq.Type "boolean"}}
+        h["{{$kq}}"] = strcony.FormatBool(reqContext.{{$kq|printf "%s"|Camelize}})
 	{{- else}}
         h["{{$kq}}"] = reqContext.{{$kq|printf "%s"|Camelize}}
 	{{- end}}
@@ -65,8 +75,6 @@ func (s {{$apiName}}) {{$v.MethodName}}(reqContext *types.{{$v.MethodName}}Conte
     }
     {{- end}}
 
-    {{$lenParams := len $v.QueryParameters}}
-    {{$lenHeader := len $v.Headers}}
     resp, err := requests.Request("{{$v.Verb}}", s.baseURI {{$v.Route}}{{if gt $lenParams 0}}, p{{end}}{{if gt $lenHeader 0}}, h{{end}}{{if .ReqBody}}, requests.JSON(jsonBody){{end}})
     if err != nil {
         return
