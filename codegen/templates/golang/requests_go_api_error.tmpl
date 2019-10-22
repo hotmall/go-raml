@@ -11,11 +11,15 @@ import (
 // BasicError represents common error info
 type BasicError struct {
 	Data string `json:"error"`
+	Message string `json:"message"`
 }
 
 // Error implements error interface
 func (e BasicError) Error() string {
-	return e.Data
+	if e.Data != "" {
+		return e.Data
+	}
+	return e.Message
 }
 
 // APIError represents any error condition that returned by API server.
