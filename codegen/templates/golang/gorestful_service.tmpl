@@ -136,7 +136,7 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 	}
 
 	{{- if .RespBody }}
-	if err := resp.WriteEntity(respBody); err != nil {
+	if err := resp.WriteHeaderAndEntity({{.FirstSuccessRespStatus}}, respBody); err != nil {
 		result := make(map[string]string, 1)
 		result["error"] = err.Error()
 		resp.WriteHeaderAndEntity(500, result)
