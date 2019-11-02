@@ -15,6 +15,7 @@ type Client struct {
 	apiDef         *raml.APIDefinition
 	Name           string
 	BaseURI        string
+	Kind           string
 	libraries      map[string]*raml.Library
 	PackageName    string
 	RootImportPath string
@@ -24,7 +25,7 @@ type Client struct {
 }
 
 // NewClient creates a new Golang client
-func NewClient(apiDef *raml.APIDefinition, packageName, rootImportPath, targetDir string,
+func NewClient(apiDef *raml.APIDefinition, kind, packageName, rootImportPath, targetDir string,
 	libsRootURLs []string) (Client, error) {
 
 	// rootImportPath only needed if we use libraries
@@ -55,6 +56,7 @@ func NewClient(apiDef *raml.APIDefinition, packageName, rootImportPath, targetDi
 		apiDef:         apiDef,
 		Name:           commons.NormalizeIdentifier(commons.NormalizeURI(apiDef.Title)),
 		BaseURI:        baseURI,
+		Kind:           kind,
 		libraries:      apiDef.Libraries,
 		PackageName:    packageName,
 		RootImportPath: rootImportPath,
@@ -75,6 +77,8 @@ func (gc Client) Generate() error {
 	gh := goramlHelper{
 		packageName: "goraml",
 		packageDir:  "goraml",
+		command:     "client",
+		kind:        gc.Kind,
 	}
 	if err := gh.generate(gc.TargetDir); err != nil {
 		return err
@@ -90,8 +94,10 @@ func (gc Client) Generate() error {
 		return err
 	}
 
-	if err := gc.generateHelperFile(gc.TargetDir); err != nil {
-		return err
+	if gc.Kind == "grequests" {
+		if err := gc.generateHelperFile(gc.TargetDir); err != nil {
+			return err
+		}
 	}
 
 	if err := gc.generateSecurity(gc.TargetDir); err != nil {
@@ -112,10 +118,24 @@ func (gc *Client) generateHelperFile(dir string) error {
 }
 
 func (gc *Client) generateServices(dir string) error {
-	for _, s := range gc.Services {
-		//sort.Sort(resource.ByEndpoint(s.Methods))
-		if err := commons.GenerateFile(s, "./templates/golang/grequests_client_api.tmpl", "grequests_client_api", s.filename(dir), true); err != nil {
-			return err
+	switch gc.Kind {
+	case "grequests":
+		for _, s := range gc.Services {
+			if err := commons.GenerateFile(s, "./templates/golang/grequests_client_api.tmpl", "grequests_client_api", s.filename(dir), true); err != nil {
+				return err
+			}
+		}
+	case "requests":
+		for _, s := range gc.Services {
+			for _, m := range s.Methods {
+				c := newGoContext(m.method)
+				if err := c.generateClient(dir); err != nil {
+					return err
+				}
+			}
+			if err := commons.GenerateFile(s, "./templates/golang/requests_client_api.tmpl", "requests_client_api", s.filename(dir), true); err != nil {
+				return err
+			}
 		}
 	}
 	return nil

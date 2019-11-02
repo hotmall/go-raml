@@ -24,6 +24,10 @@ func (m method) ReqBody() string {
 	return formatReqRespBody(m.reqBody)
 }
 
+func (m method) RespBody() string {
+	return m.firstSuccessRespBodyType()
+}
+
 // TODO : move it to codegen/resource
 type respBody struct {
 	Code     int

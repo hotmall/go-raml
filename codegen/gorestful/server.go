@@ -76,6 +76,8 @@ func (gs *Server) Generate() error {
 		rootImportPath: gs.RootImportPath,
 		packageName:    "goraml",
 		packageDir:     "goraml",
+		command:        "server",
+		kind:           globKind,
 	}
 	if err := gh.generate(gs.TargetDir); err != nil {
 		return err

@@ -90,12 +90,12 @@ func copyURIParameters(context map[string]raml.NamedParameter, resource *raml.Re
 	}
 }
 
-func copyHeaders(headers map[string]raml.NamedParameter, method *serverMethod) {
-	if method == nil {
+func copyHeaders(headers map[string]raml.NamedParameter, m *method) {
+	if m == nil {
 		return
 	}
 
-	for key, value := range method.Headers {
+	for key, value := range m.Headers {
 		name := fmt.Sprintf("%s", key)
 		headers[name] = raml.NamedParameter{
 			Name:        value.Name,
@@ -118,16 +118,16 @@ type goContext struct {
 	Fields      map[string]paramDef // all context's fields
 }
 
-func newGoContext(method *serverMethod) *goContext {
+func newGoContext(m *method) *goContext {
 	parameters := make(map[string]raml.NamedParameter)
 
-	copyURIParameters(parameters, method.Resource)
+	copyURIParameters(parameters, m.Resource)
 
-	for name, param := range method.QueryParameters {
+	for name, param := range m.QueryParameters {
 		parameters[name] = param
 	}
 
-	copyHeaders(parameters, method)
+	copyHeaders(parameters, m)
 
 	fields := make(map[string]paramDef)
 
@@ -136,9 +136,9 @@ func newGoContext(method *serverMethod) *goContext {
 		fields[name] = newParamDef(&param)
 	}
 
-	methodName := method.Name
-	if len(method.DisplayName) > 0 {
-		methodName = strings.Title(commons.DisplayNameToFuncName(method.DisplayName))
+	methodName := m.Name
+	if len(m.DisplayName) > 0 {
+		methodName = strings.Title(commons.DisplayNameToFuncName(m.DisplayName))
 	}
 
 	return &goContext{
@@ -152,6 +152,15 @@ func (gc goContext) generate(dir string) error {
 	filename := filepath.Join(dir+"/types/", gc.Name+"Context.go")
 	if err := commons.GenerateFile(gc, "./templates/golang/gorestful_context.tmpl",
 		"gorestful_context_template", filename, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (gc goContext) generateClient(dir string) error {
+	filename := filepath.Join(dir+"/types/", gc.Name+"Context.go")
+	if err := commons.GenerateFile(gc, "./templates/golang/requests_client_context.tmpl",
+		"requests_client_context", filename, true); err != nil {
 		return err
 	}
 	return nil
