@@ -15,8 +15,8 @@ var (
 type DatetimeOnly time.Time
 
 // MarshalJSON override marshalJSON
-func (dto *DatetimeOnly) MarshalJSON() ([]byte, error) {
-	return []byte(time.Time(*dto).Format(datetimeOnlyFmtTicked)), nil
+func (dto DatetimeOnly) MarshalJSON() ([]byte, error) {
+	return []byte(time.Time(dto).Format(datetimeOnlyFmtTicked)), nil
 }
 
 // UnmarshalJSON override unmarshalJSON
@@ -31,6 +31,6 @@ func (dto *DatetimeOnly) UnmarshalJSON(b []byte) error {
 }
 
 // String returns string representation
-func (dto *DatetimeOnly) String() string {
-	return time.Time(*dto).Format(datetimeOnlyFmt)
+func (dto DatetimeOnly) String() string {
+	return time.Time(dto).Format(datetimeOnlyFmt)
 }

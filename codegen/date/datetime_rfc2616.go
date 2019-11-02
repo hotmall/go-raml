@@ -13,8 +13,8 @@ var (
 type DateTimeRFC2616 time.Time
 
 // MarshalJSON override marshalJSON
-func (dt *DateTimeRFC2616) MarshalJSON() ([]byte, error) {
-	return []byte(time.Time(*dt).Format(dateTimeRFC2616FmtTicked)), nil
+func (dt DateTimeRFC2616) MarshalJSON() ([]byte, error) {
+	return []byte(time.Time(dt).Format(dateTimeRFC2616FmtTicked)), nil
 }
 
 // UnmarshalJSON override unmarshalJSON
@@ -29,6 +29,6 @@ func (dt *DateTimeRFC2616) UnmarshalJSON(b []byte) error {
 }
 
 // String returns it's string representation
-func (dt *DateTimeRFC2616) String() string {
-	return time.Time(*dt).Format(dateTimeRFC2616Fmt)
+func (dt DateTimeRFC2616) String() string {
+	return time.Time(dt).Format(dateTimeRFC2616Fmt)
 }
