@@ -1,0 +1,20 @@
+{{- define "gorestful_resource_method" -}}
+// THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+
+package {{.PackageName}}
+
+import (
+    {{ range $k, $v := .Method.Imports -}}
+        {{$v}}
+    {{ end -}}
+)
+
+
+// {{.Method.MethodName}} is the handler for {{.Method.Verb}} {{.Method.Endpoint}}
+{{- range $kf, $vf := .Method.FuncComments}}
+// {{$vf}}{{end}}
+func (r {{.ResourceName}}Resource) {{.Method.MethodName}}(reqContext *types.{{.Method.MethodName}}Context{{if .ReqBody}}, reqBody {{.ReqBody}}{{end}}) (respHeader map[string]string{{if .RespBody}}, respBody {{.RespBody}}{{end}}, e *types.Error) {
+    return
+}
+
+{{- end -}}

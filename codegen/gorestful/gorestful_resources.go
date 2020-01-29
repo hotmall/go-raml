@@ -76,10 +76,27 @@ func (gr *goResource) generateService(dir string) error {
 	}
 
 	// Generate resource
-	filename = filepath.Join(dir+"/"+resourceDir, strings.ToLower(gr.Name)+"_resource") + ".go"
+	resourceFile := filepath.Join(dir+"/"+resourceDir, strings.ToLower(gr.Name))
+	filename = resourceFile + "_resource.go"
 	if err := commons.GenerateFile(gr, "./templates/golang/gorestful_resource.tmpl",
 		"gorestful_resource_template", filename, false); err != nil {
 		return err
+	}
+
+	// generate per methods file
+	for _, sm := range gr.Methods {
+		ctx := map[string]interface{}{
+			"Method":       sm,
+			"ResourceName": gr.Name,
+			"PackageName":  "resource",
+			"ReqBody":      sm.ReqBody(),
+			"RespBody":     sm.RespBody(),
+		}
+		filename = resourceFile + "_" + strings.ToLower(sm.MethodName) + ".go"
+		if err := commons.GenerateFile(ctx, "./templates/golang/gorestful_resource_method.tmpl",
+			"gorestful_resource_method", filename, false); err != nil {
+			return err
+		}
 	}
 
 	return nil

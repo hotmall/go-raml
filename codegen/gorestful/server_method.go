@@ -86,20 +86,12 @@ func (gm serverMethod) libImported(rootImportPath string) map[string]struct{} {
 // Imports return all packages needed
 // by this method
 func (gm serverMethod) Imports() []string {
-	ip := map[string]struct{}{
-		`"net/http"`: struct{}{},
-	}
-	if gm.firstSuccessRespBodyType() != "" || gm.reqBody != "" {
-		ip[`"encoding/json"`] = struct{}{}
-	}
+	ip := map[string]struct{}{}
 	if gm.needImportGoramlTypes() {
 		ip[`"`+globRootImportPath+"/types"+`"`] = struct{}{}
 	}
 	for lib := range gm.libImported(globRootImportPath) {
 		ip[lib] = struct{}{}
-	}
-	if globKind == "gorestful" {
-		ip[`"`+globRootImportPath+"/delegate"+`"`] = struct{}{}
 	}
 	return commons.MapToSortedStrings(ip)
 }
