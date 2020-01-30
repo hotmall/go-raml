@@ -44,11 +44,18 @@ func NewClient(apiDef *raml.APIDefinition, kind, packageName, rootImportPath, ta
 		baseURI = strings.Replace(baseURI, "{version}", apiDef.Version, -1)
 	}
 
+	newParams := make([]string, 0)
+	if len(apiDef.BaseURIParameters) > 0 {
+		for name := range apiDef.BaseURIParameters {
+			newParams = append(newParams, name)
+		}
+	}
+
 	// creates client services objects
 	services := map[string]*ClientService{}
 	for endpoint, res := range apiDef.Resources {
 		rd := resource.New(apiDef, &res, commons.NormalizeURITitle(endpoint), true)
-		services[endpoint] = newClientService(endpoint, packageName, baseURI, &rd)
+		services[endpoint] = newClientService(endpoint, packageName, baseURI, &rd, newParams)
 	}
 
 	// creates client object
@@ -104,10 +111,6 @@ func (gc Client) Generate() error {
 		return err
 	}
 
-	// if err := gc.generateServices(gc.TargetDir); err != nil {
-	// 	return err
-	// }
-	// return gc.generateClientFile(gc.TargetDir)
 	return gc.generateServices(gc.TargetDir)
 }
 
@@ -158,10 +161,4 @@ func (gc *Client) generateSecurity(dir string) error {
 		}
 	}
 	return nil
-}
-
-// generate Go client lib file
-func (gc *Client) generateClientFile(dir string) error {
-	fileName := filepath.Join(dir, strings.ToLower(gc.Name)+"_api.go")
-	return commons.GenerateFile(gc, "./templates/golang/grequests_client_api.tmpl", "grequests_client_api", fileName, true)
 }

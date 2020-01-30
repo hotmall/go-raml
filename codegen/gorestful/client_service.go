@@ -13,10 +13,11 @@ type ClientService struct {
 	resource.ClientService
 	PackageName string
 	BaseURI     string
+	NewParams   []string
 	Methods     []clientMethod
 }
 
-func newClientService(rootEndpoint, packageName, baseURI string, rd *resource.Resource) *ClientService {
+func newClientService(rootEndpoint, packageName, baseURI string, rd *resource.Resource, newParams []string) *ClientService {
 	var methods []clientMethod
 
 	for _, rm := range rd.Methods {
@@ -30,6 +31,7 @@ func newClientService(rootEndpoint, packageName, baseURI string, rd *resource.Re
 		ClientService: cs,
 		PackageName:   packageName,
 		BaseURI:       baseURI,
+		NewParams:     newParams,
 		Methods:       methods,
 	}
 }

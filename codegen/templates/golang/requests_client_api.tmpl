@@ -6,6 +6,7 @@ package {{.PackageName}}
 {{$apiName := .Name}}
 import (
 	{{ if .NeedImportJSON}}"encoding/json"{{end}}
+    {{ with .NewParams}}"strings"{{end}}
     "github.com/hotmall/requests"
 
     {{ range $k, $v := .Imports -}}
@@ -19,9 +20,13 @@ type {{$apiName}} struct {
 }
 
 // New{{$apiName}} new an API object
-func New{{$apiName}}(host string) {{$apiName}} {
+func New{{$apiName}}(host {{range $param := .NewParams}},{{$param}}{{end}} string) {{$apiName}} {
+    baseURI := host + "{{.BaseURI}}"
+	{{- range $param := .NewParams}}
+	baseURI = strings.ReplaceAll(baseURI, {{$param|printf "{%s}"|printf "%q"}}, {{$param}})
+	{{- end}}
     return {{$apiName}}{
-        baseURI: host+"{{.BaseURI}}",
+        baseURI: baseURI,
     }
 }
 
