@@ -1,8 +1,7 @@
 {{- define "gorestful_makefile" -}}
 PACKAGES = $(shell go list ./... | grep -v '/vendor/' | grep -v '/delegate' | grep -v '/goraml' | grep -v '/service' | grep -v '/types')
 
-PACKAGE = {{.RootImportPath}}
-SERVICE_NAME = $(shell dirname $(PACKAGE) | xargs basename)
+SERVICE_NAME = $(shell basename {{.RootImportPath}})
 
 BUILD_DATE = $(shell date +%FT%T%z)
 BUILD = $(shell date -d "$(BUILD_DATE)" +%Y%m%d.%H%M%S)
@@ -18,7 +17,7 @@ all: build test zip
 build:
 	go generate
 	go build -v -ldflags '$(LDFLAGS)'
-	mv -f code ../runtime/bin/$(SERVICE_NAME)
+	mv -f $(SERVICE_NAME) ../runtime/bin
 
 clean:
 	rm -rf delegate

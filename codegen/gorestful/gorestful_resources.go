@@ -46,7 +46,6 @@ func (gr *goResource) DelegateImporters() []string {
 
 func (gr *goResource) ResourceImporters() []string {
 	ip := map[string]struct{}{}
-	ip[`"`+globRootImportPath+"/types"+`"`] = struct{}{}
 	ip[`"`+globRootImportPath+"/service"+`"`] = struct{}{}
 	ip[`"github.com/emicklei/go-restful"`] = struct{}{}
 	return commons.MapToSortedStrings(ip)
