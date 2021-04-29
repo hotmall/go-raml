@@ -29,3 +29,5 @@ go-raml
 tags
 *.iml
 .vscode
+codegen/templates/bindata.go
+codegen/date/bindate.go
