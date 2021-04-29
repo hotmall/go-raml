@@ -7,7 +7,7 @@ package {{.PackageName}}
 import (
 	{{ if .NeedImportJSON}}"encoding/json"{{end}}
     {{ with .NewParams}}"strings"{{end}}
-    "github.com/tsingtaohot/requests"
+    "github.com/hotmall/requests"
 
     {{ range $k, $v := .Imports -}}
      {{$v}}
