@@ -87,9 +87,7 @@ func (gm serverMethod) libImported(rootImportPath string) map[string]struct{} {
 // by this method
 func (gm serverMethod) Imports() []string {
 	ip := map[string]struct{}{}
-	if gm.needImportGoramlTypes() {
-		ip[`"`+globRootImportPath+"/types"+`"`] = struct{}{}
-	}
+	ip[`"`+globRootImportPath+"/types"+`"`] = struct{}{}
 	for lib := range gm.libImported(globRootImportPath) {
 		ip[lib] = struct{}{}
 	}

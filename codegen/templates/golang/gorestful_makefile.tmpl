@@ -2,8 +2,7 @@
 SERVICE_NAME = $(shell basename {{.RootImportPath}})
 PACKAGES = $(shell go list ./... | grep -v '/vendor/' | grep -v '/delegate' | grep -v '/goraml' | grep -v '${SERVICE_NAME}/service' | grep -v '/types' | grep -v '/beans' | grep -v '/dao' | grep -v '/typeconv')
 
-BUILD_DATE = $(shell date +%FT%T%z)
-BUILD = $(shell date -d "$(BUILD_DATE)" +%Y%m%d.%H%M%S)
+BUILD = $(shell date +"%Y%m%d.%H%M%S")
 
 COMMIT_HASH = $(shell git rev-parse --short HEAD 2>/dev/null)
 SERVICE_VERSION = $(shell cat VERSION)
