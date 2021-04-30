@@ -14,6 +14,7 @@ all: build test zip
 
 build:
 	go generate
+	go mod tidy
 	go build -v -ldflags '$(LDFLAGS)'
 	mv -f $(SERVICE_NAME) ../runtime/bin
 
