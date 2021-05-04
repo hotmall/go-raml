@@ -60,8 +60,18 @@ func (gr *goResource) generateService(dir string) error {
 		}
 	}
 
+	// Generate message
+	var filename string
+	for _, m := range gr.Methods {
+		filename = filepath.Join(dir+"/"+messageDir, strings.ToLower(m.MethodName)+"_msg") + ".go"
+		if err := commons.GenerateFile(m, "./templates/golang/gorestful_message.tmpl",
+			"gorestful_message_template", filename, true); err != nil {
+			return err
+		}
+	}
+
 	// Generate delegate
-	filename := filepath.Join(dir+"/"+delegateDir, strings.ToLower(gr.Name)+"_if") + ".go"
+	filename = filepath.Join(dir+"/"+delegateDir, strings.ToLower(gr.Name)+"_if") + ".go"
 	if err := commons.GenerateFile(gr, "./templates/golang/gorestful_delegate.tmpl",
 		"gorestful_delegate_template", filename, true); err != nil {
 		return err

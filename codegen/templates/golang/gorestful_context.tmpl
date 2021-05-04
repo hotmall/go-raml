@@ -19,7 +19,42 @@ type {{.Name}}Context struct {
 func New{{.Name}}Context() *{{.Name}}Context {
     return &{{.Name}}Context {
         Headers: make(map[string]string),
+        {{- range $key, $value := .Fields }}
+            {{- if $value.Default }}
+                {{- if eq $value.Type "string" }}
+                    {{$value.Name}}: "{{$value.Default}}",
+                {{- else}}
+                    {{$value.Name}}: {{$value.Default}},
+                {{- end}}
+            {{- end -}}
+        {{- end }}
     }
+}
+
+// Reset reset field
+func (s *{{.Name}}Context) Reset() {
+    for key := range s.Headers {
+        delete(s.Headers, key)
+    }
+    {{- range $key, $value := .Fields }}
+        {{- if $value.Default}}
+            {{- if eq $value.Type "string" }}
+                s.{{$value.Name}} = "{{$value.Default}}"
+            {{- else}}
+                s.{{$value.Name}} = {{$value.Default}}
+            {{- end}}
+        {{- else}}
+            {{- if eq $value.Type "string" }}
+                s.{{$value.Name}} = ""
+            {{- else if eq $value.Type "bool" }}
+                s.{{$value.Name}} = false
+            {{- else if eq $value.Type "int" "int8" "int16" "int32" "int64"}}
+                s.{{$value.Name}} = 0
+            {{- else if eq $value.Type "float64" }}
+                s.{{$value.Name}} = 0.0
+            {{- end}}
+        {{- end}}
+    {{- end }}
 }
 
 // Validate check if the data is legal

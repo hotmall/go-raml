@@ -92,6 +92,7 @@ func GenerateFile(data interface{}, tmplFile, tmplName, filename string, overrid
 		"Title":             strings.Title,
 		"Camelize":          utils.Camelize,
 		"CamelizeDownFirst": utils.CamelizeDownFirst,
+		"DownFirst":         utils.DownFirst,
 	}
 
 	// all template files path is relative to current directory (./)

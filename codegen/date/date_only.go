@@ -30,6 +30,11 @@ func (do *DateOnly) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// Reset set time zero
+func (do *DateOnly) Reset() {
+	*do = DateOnly(dateTimeZero)
+}
+
 // String returns string representation
 func (do DateOnly) String() string {
 	return time.Time(do).Format(dateOnlyFmt)

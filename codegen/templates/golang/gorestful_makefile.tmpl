@@ -1,6 +1,6 @@
 {{- define "gorestful_makefile" -}}
 SERVICE_NAME = $(shell basename {{.RootImportPath}})
-PACKAGES = $(shell go list ./... | grep -v '/vendor/' | grep -v '/delegate' | grep -v '/goraml' | grep -v '${SERVICE_NAME}/service' | grep -v '/types' | grep -v '/beans' | grep -v '/dao' | grep -v '/typeconv')
+PACKAGES = $(shell go list ./... | grep -v '/vendor/' | grep -v '/delegate' | grep -v '/goraml' | grep -v '${SERVICE_NAME}/service' | grep -v '/types' | grep -v '/message' | grep -v '/beans' | grep -v '/dao' | grep -v '/typeconv')
 
 BUILD_DATE = $(shell date +%FT%T%z)
 ZIP_DATE = $(shell date +"%Y%m%d.%H%M%S")
@@ -24,6 +24,7 @@ clean:
 	rm -rf goraml
 	rm -rf service
 	rm -rf types
+	rm -rf message
 	rm ../runtime/bin/$(SERVICE_NAME)
 
 test:

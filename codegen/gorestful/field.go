@@ -17,6 +17,7 @@ type fieldDef struct {
 	IsOmitted     bool   // omitted empty
 	UniqueItems   bool
 	Enum          *enum // not nil if this field contains enum
+	Default       interface{}
 
 	Validators string
 }
@@ -73,6 +74,10 @@ func (fd fieldDef) Type() string {
 	}
 
 	return fmt.Sprintf("%v_%v.%v", elems[0], typePackage, elems[1])
+}
+
+func (fd fieldDef) IsArray() bool {
+	return strings.HasPrefix(fd.fieldType, "[]")
 }
 
 func (fd *fieldDef) buildValidators(p raml.Property) {

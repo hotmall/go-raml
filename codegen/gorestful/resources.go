@@ -19,6 +19,7 @@ const (
 	serviceDir   = "service"  // dir on which we put our service
 	delegateDir  = "delegate" // dir on which we put our delegate
 	resourceDir  = "resource" // dir on which we put our resource
+	messageDir   = "message"  // dir on which we put our message
 )
 
 type goResource struct {

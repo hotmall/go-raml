@@ -22,12 +22,31 @@ type {{ .Name }} struct {
 }
 {{- end}}
 
+// Reset set {{.Name}} zero value
+func (s *{{.Name}}) Reset() {
+    {{- range $key, $value := .Fields }}
+        {{- if eq $value.Type "string" "json.RawMessage" }}
+            s.{{$value.Name}} = ""
+        {{- else if eq $value.Type "bool" }}
+            s.{{$value.Name}} = false
+        {{- else if eq $value.Type "int" "int8" "int16" "int32" "int64"}}
+            s.{{$value.Name}} = 0
+        {{- else if eq $value.Type "float64"}}
+            s.{{$value.Name}} = 0.0
+        {{- else if $value.IsArray}}
+            s.{{$value.Name}} = s.{{$value.Name}}[:0]
+        {{- else}}
+            s.{{$value.Name}}.Reset()
+        {{- end}}
+    {{- end}}
+}
+
 {{ if .NotBareInterface}}
 // Validate check if the data is legal
 func (s {{.Name}}) Validate() error {
-    {{/* field level validation */}}
-    {{ range $k, $v := .Fields }}
-    {{ if $v.UniqueItems }}
+    {{/* field level validation */ -}}
+    {{- range $k, $v := .Fields }}
+    {{- if $v.UniqueItems }}
     m{{$v.Name}} := map[interface{}]struct{}{}
     for _, v := range s.{{$v.Name}} {
         m{{$v.Name}}[v] = struct{}{}
@@ -35,20 +54,20 @@ func (s {{.Name}}) Validate() error {
     if len(m{{$v.Name}}) != len(s.{{$v.Name}}) {
         return fmt.Errorf("{{$v.Name}} must be unique")
     }
-    {{ end}}
-    {{ end }}
-    {{/* ************ type level validation ******* */}}
-    {{if .T.MinItems -}}
+    {{- end}}
+    {{- end }}
+    {{- /* type level validation */ -}}
+    {{- if .T.MinItems -}}
     if len(s) < {{.T.MinItems}} {
         return fmt.Errorf("len should be >=  {{.T.MinItems}}")
     }
     {{- end}}
-    {{if .T.MaxItems -}}
+    {{- if .T.MaxItems -}}
     if len(s) > {{.T.MaxItems}} {
         return fmt.Errorf("len should be <= {{.T.MaxItems}}")
     }
     {{- end}}
-    {{ if .T.UniqueItems }}
+    {{- if .T.UniqueItems }}
 	// make sure it is unique
     m := map[interface{}]struct{}{}
 	for _, v := range s {
@@ -58,12 +77,12 @@ func (s {{.Name}}) Validate() error {
 		return fmt.Errorf("collection is not unique")
 	}
     {{- end }}
-    {{/* call go-validator.Validate if not OneLineDef */}}
-    {{if .OneLineDef -}}
+    {{- /* call go-validator.Validate if not OneLineDef */ -}}
+    {{- if .OneLineDef -}}
     return nil
-    {{ else -}}
+    {{- else -}}
     return validator.Validate(s)
-    {{ end -}}
+    {{- end }}
 }
 {{ end }}
 {{end}}

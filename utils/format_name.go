@@ -70,3 +70,8 @@ func CamelizeDownFirst(name string) string {
 	name = Camelize(name)
 	return strings.ToLower(name[:1]) + name[1:]
 }
+
+// DownFirst down first name
+func DownFirst(name string) string {
+	return strings.ToLower(name[:1]) + name[1:]
+}

@@ -28,6 +28,11 @@ func (dt *DateTimeRFC2616) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// Reset set time zero value
+func (dt *DateTimeRFC2616) Reset() {
+	*dt = DateTimeRFC2616(dateTimeZero)
+}
+
 // String returns it's string representation
 func (dt DateTimeRFC2616) String() string {
 	return time.Time(dt).Format(dateTimeRFC2616Fmt)

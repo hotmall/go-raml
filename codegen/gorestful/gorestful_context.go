@@ -23,6 +23,7 @@ func newParamDef(param *raml.NamedParameter) paramDef {
 		Name:      formatFieldName(param.Name),
 		fieldType: paramType,
 		IsOmitted: !param.Required,
+		Default:   param.Default,
 	}
 
 	pd.buildValidators(param)

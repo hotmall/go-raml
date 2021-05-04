@@ -30,6 +30,11 @@ func (to *TimeOnly) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// Reset set time zero value
+func (to *TimeOnly) Reset() {
+	*to = TimeOnly(dateTimeZero)
+}
+
 // String returns string representation
 func (to TimeOnly) String() string {
 	return time.Time(to).Format(timeOnlyFmt)

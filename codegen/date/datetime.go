@@ -5,6 +5,7 @@ import (
 )
 
 var (
+	dateTimeZero      time.Time
 	dateTimeFmt       = "2006-01-02T15:04:05.999999999Z"
 	dateTimeFmtTicked = `"` + dateTimeFmt + `"`
 )
@@ -26,6 +27,11 @@ func (dt *DateTime) UnmarshalJSON(b []byte) error {
 
 	*dt = DateTime(ts)
 	return nil
+}
+
+// Reset set time zero value
+func (dt *DateTime) Reset() {
+	*dt = DateTime(dateTimeZero)
 }
 
 // String returns it's string representation
