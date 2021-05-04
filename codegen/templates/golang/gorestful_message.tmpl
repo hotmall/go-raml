@@ -5,7 +5,7 @@ package message
 
 import (
     "sync"
-    {{ range $k, $v := .Imports -}}
+    {{ range $k, $v := .MsgImports -}}
         {{$v}}
     {{ end -}}
 )

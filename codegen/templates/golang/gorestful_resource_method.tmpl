@@ -13,7 +13,7 @@ import (
 // {{.Method.MethodName}} is the handler for {{.Method.Verb}} {{.Method.Endpoint}}
 {{- range $kf, $vf := .Method.FuncComments}}
 // {{$vf}}{{end}}
-func (r {{.ResourceName}}Resource) {{.Method.MethodName}}(reqContext *types.{{.Method.MethodName}}Context{{if .ReqBody}}, reqBody {{.ReqBody}}{{end}}) (respHeader map[string]string{{if .RespBody}}, respBody {{.RespBody}}{{end}}, e *types.Error) {
+func (r {{.ResourceName}}Resource) {{.Method.MethodName}}(req *message.{{.Method.MethodName}}Req, resp *message.{{.Method.MethodName}}Resp) (e *types.Error) {
     return
 }
 

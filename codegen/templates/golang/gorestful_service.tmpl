@@ -39,7 +39,8 @@ func New{{.Name}}Service(delegator delegate.{{.Name}}Delegate) *restful.WebServi
 {{- range $kf, $vf := $v.FuncComments}}
 // {{$vf}}{{end}}
 func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restful.Response) {
-	reqContext := types.New{{$v.MethodName}}Context()
+	mreq := message.Acquire{{$v.MethodName}}Req()
+	defer message.Release{{$v.MethodName}}Req(mreq)
 
 	{{- range $kq, $vq := $v.QueryParameters }}
 	{{$kq|CamelizeDownFirst}} := req.QueryParameter("{{$kq}}")
@@ -52,10 +53,10 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 			resp.WriteHeaderAndEntity(400, result)
 			return
 		}
-		reqContext.{{$kq|Camelize}} = i
+		mreq.Context.{{$kq|Camelize}} = i
 	}
 	{{- else}}
-	reqContext.{{$kq|Camelize}} = {{$kq|CamelizeDownFirst}}
+	mreq.Context.{{$kq|Camelize}} = {{$kq|CamelizeDownFirst}}
 	{{- end}}
 	{{- end }}
 
@@ -70,15 +71,15 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 			resp.WriteHeaderAndEntity(400, result)
 			return
 		}
-		reqContext.{{$kq|Camelize}} = i
+		mreq.Context.{{$kq|Camelize}} = i
 	}
 	{{- else}}
-	reqContext.{{$kq|Camelize}} = {{$kq|CamelizeDownFirst}}
+	mreq.Context.{{$kq|Camelize}} = {{$kq|CamelizeDownFirst}}
 	{{- end}}
 	{{- end }}
 
 	{{- range $kq, $vq := $v.Headers }}
-	reqContext.Headers["{{$kq}}"] = req.HeaderParameter("{{$kq}}")
+	mreq.Context.Headers["{{$kq}}"] = req.HeaderParameter("{{$kq}}")
 	{{$kq|printf "%s"|CamelizeDownFirst}} := req.HeaderParameter("{{$kq}}")
 	{{- if eq $vq.Type "integer"}}
 	if {{$kq|CamelizeDownFirst}} != "" {
@@ -89,15 +90,15 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 			resp.WriteHeaderAndEntity(400, result)
 			return
 		}
-		reqContext.{{$kq|printf "%s"|Camelize}} = i
+		mreq.Context.{{$kq|printf "%s"|Camelize}} = i
 	}
 	{{- else}}
-	reqContext.{{$kq|printf "%s"|Camelize}} = {{$kq|printf "%s"|CamelizeDownFirst}}
+	mreq.Context.{{$kq|printf "%s"|Camelize}} = {{$kq|printf "%s"|CamelizeDownFirst}}
 	{{- end}}
 	{{- end }}
 
 	// validate context
-	if err := reqContext.Validate(); err != nil {
+	if err := mreq.Context.Validate(); err != nil {
 		result := make(map[string]string, 1)
 		result["error"] = err.Error()
 		resp.WriteHeaderAndEntity(400, result)
@@ -124,7 +125,10 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 	{{- end }}
 	{{- end }}
 
-	respHeader{{if .RespBody}}, respBody{{end}}, err := s.delegator.{{$v.MethodName}}(reqContext{{if .ReqBody}}, reqBody{{end}})
+	mresp := message.Acquire{{$v.MethodName}}Resp()
+	defer message.Release{{$v.MethodName}}Resp(mresp)
+
+	err := s.delegator.{{$v.MethodName}}(mreq, mresp)
 	if err != nil {
 		result := make(map[string]string, 1)
 		result["error"] = err.Error()
@@ -132,12 +136,12 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 		return
 	}
 	
-	for k, v := range respHeader {
+	for k, v := range mresp.Headers {
 		resp.AddHeader(k, v)
 	}
 
 	{{- if .RespBody }}
-	if err := resp.WriteHeaderAndEntity({{.FirstSuccessRespStatus}}, respBody); err != nil {
+	if err := resp.WriteHeaderAndEntity({{.FirstSuccessRespStatus}}, mresp.Body); err != nil {
 		result := make(map[string]string, 1)
 		result["error"] = err.Error()
 		resp.WriteHeaderAndEntity(500, result)

@@ -88,9 +88,17 @@ func (gm serverMethod) libImported(rootImportPath string) map[string]struct{} {
 func (gm serverMethod) Imports() []string {
 	ip := map[string]struct{}{}
 	ip[`"`+globRootImportPath+"/types"+`"`] = struct{}{}
+	ip[`"`+globRootImportPath+"/message"+`"`] = struct{}{}
 	for lib := range gm.libImported(globRootImportPath) {
 		ip[lib] = struct{}{}
 	}
+	return commons.MapToSortedStrings(ip)
+}
+
+// MsgImports return all needed by this method message
+func (gm serverMethod) MsgImports() []string {
+	ip := map[string]struct{}{}
+	ip[`"`+globRootImportPath+"/types"+`"`] = struct{}{}
 	return commons.MapToSortedStrings(ip)
 }
 

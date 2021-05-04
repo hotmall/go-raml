@@ -12,7 +12,7 @@ import (
 // {{.Name}}Delegate is interface of {{.Endpoint}} root endpoint
 type {{.Name}}Delegate interface {
     {{- range $k, $v := .Methods}}
-    {{$v.MethodName}}(reqContext *types.{{$v.MethodName}}Context{{if .ReqBody}}, reqBody {{.ReqBody}}{{end}}) (respHeader map[string]string{{if .RespBody}}, respBody {{.RespBody}}{{end}}, e *types.Error)
+    {{$v.MethodName}}(req *message.{{$v.MethodName}}Req, resp *message.{{$v.MethodName}}Resp) (e *types.Error)
     {{- end}}
 }
 {{end -}}
