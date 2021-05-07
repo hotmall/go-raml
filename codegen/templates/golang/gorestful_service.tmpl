@@ -106,9 +106,8 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
     	}
 	{{- if .ReqBody }}
 	
-	var reqBody {{.ReqBody}}
 	// decode request
-	if err := req.ReadEntity(&reqBody); err != nil {
+	if err := req.ReadEntity(&mreq.Body); err != nil {
 		result := make(map[string]string, 1)
 		result["error"] = err.Error()
 		resp.WriteHeaderAndEntity(400, result)
@@ -116,7 +115,7 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 	}
 	{{ if .ReqBodyNeedValidation}}
 	// validate request
-	if err := reqBody.Validate(); err != nil {
+	if err := mreq.Body.Validate(); err != nil {
 		result := make(map[string]string, 1)
 		result["error"] = err.Error()
 		resp.WriteHeaderAndEntity(400, result)
