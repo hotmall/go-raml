@@ -56,7 +56,9 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 		mreq.Context.{{$kq|Camelize}} = i
 	}
 	{{- else}}
-	mreq.Context.{{$kq|Camelize}} = {{$kq|CamelizeDownFirst}}
+	if {{$kq|CamelizeDownFirst}} != "" {
+		mreq.Context.{{$kq|Camelize}} = {{$kq|CamelizeDownFirst}}
+	}
 	{{- end}}
 	{{- end }}
 

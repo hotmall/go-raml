@@ -6,6 +6,16 @@ type {{.Name}} {{.Type}}
 
 const (
 {{- range $k, $v := .Fields}}
-    {{$v.Name}} {{.Type}} = {{$v.Value}}{{end}}
+    {{$v.Name}} {{.Type}} = {{$v.Value}}
+{{- end}}
 )
+
+// Reset set {{.Name}} zero value
+func (s *{{.Name}}) Reset() {
+    {{- if eq .Type "string" }}
+    *s = ""
+    {{- else if eq .Type "int" }}
+    *s = 0
+    {{- end -}}
+}
 {{end}}

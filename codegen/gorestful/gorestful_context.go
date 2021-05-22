@@ -33,7 +33,7 @@ func newParamDef(param *raml.NamedParameter) paramDef {
 
 func (pd paramDef) Type() string {
 	// doesn't have "." -> doesnt import from other package
-	if strings.Index(pd.fieldType, ".") < 0 {
+	if !strings.Contains(pd.fieldType, ".") {
 		return pd.fieldType
 	}
 
@@ -60,7 +60,9 @@ func (pd *paramDef) buildValidators(p *raml.NamedParameter) {
 		addVal(fmt.Sprintf("max=%v", *p.MaxLength))
 	}
 	if p.Pattern != nil {
-		addVal(fmt.Sprintf("regexp=%v", *p.Pattern))
+		// Commas need to be escaped with 2 backslashes `\\`.
+		pattern := strings.ReplaceAll(*p.Pattern, ",", "\\\\,")
+		addVal(fmt.Sprintf("regexp=%v", pattern))
 	}
 
 	// Number

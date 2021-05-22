@@ -93,7 +93,9 @@ func (fd *fieldDef) buildValidators(p raml.Property) {
 		addVal(fmt.Sprintf("max=%v", *p.MaxLength))
 	}
 	if p.Pattern != nil {
-		addVal(fmt.Sprintf("regexp=%v", *p.Pattern))
+		// Commas need to be escaped with 2 backslashes `\\`.
+		pattern := strings.ReplaceAll(*p.Pattern, ",", "\\\\,")
+		addVal(fmt.Sprintf("regexp=%v", pattern))
 	}
 
 	// Number
