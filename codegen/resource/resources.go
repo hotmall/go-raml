@@ -62,6 +62,7 @@ func (rd *Resource) generateMethods(r *raml.Resource) {
 	rd.addMethod(r, r.Patch, "Patch")
 	rd.addMethod(r, r.Delete, "Delete")
 	rd.addMethod(r, r.Options, "Options")
+	rd.addMethod(r, r.Head, "Head")
 
 	for _, v := range r.Nested {
 		rd.generateMethods(v)
