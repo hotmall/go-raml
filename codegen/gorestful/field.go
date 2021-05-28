@@ -33,8 +33,8 @@ func newFieldDef(apiDef *raml.APIDefinition, structName string, prop raml.Proper
 	if _, ok := apiDef.Types[basicType]; ok {
 		titledType := strings.Title(basicType)
 
-		// check if it is a recursive type
-		if titledType == strings.Title(structName) {
+		// check if it is a recursive type or property is optional
+		if titledType == strings.Title(structName) || !prop.Required {
 			titledType = "*" + titledType // add `pointer`, otherwise compiler will complain
 		}
 
@@ -62,7 +62,7 @@ func newFieldDef(apiDef *raml.APIDefinition, structName string, prop raml.Proper
 
 func (fd fieldDef) Type() string {
 	// doesn't have "." -> doesnt import from other package
-	if strings.Index(fd.fieldType, ".") < 0 {
+	if !strings.Contains(fd.fieldType, ".") {
 		return fd.fieldType
 	}
 
@@ -70,6 +70,10 @@ func (fd fieldDef) Type() string {
 
 	// import goraml or json package
 	if elems[0] == "goraml" || elems[0] == "json" {
+		// if property is optional, add 'pointer'
+		if fd.IsOmitted {
+			return "*" + fd.fieldType
+		}
 		return fd.fieldType
 	}
 

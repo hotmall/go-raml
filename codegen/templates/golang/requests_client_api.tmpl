@@ -34,9 +34,8 @@ func New{{$apiName}}(host {{range $param := .NewParams}},{{$param}}{{end}} strin
 {{ range $kf, $vf := $v.FuncComments }}
 // {{$v.MethodName}} {{$vf}} {{end}}
 func (s {{$apiName}}) {{$v.MethodName}}(reqContext *types.{{$v.MethodName}}Context{{if .ReqBody}}, reqBody {{.ReqBody}}{{end}}) (respHeader map[string]string{{if .RespBody}}, respBody {{.RespBody}}{{end}}, err error) {
-
-    {{$lenParams := len $v.QueryParameters}}
-    {{if gt $lenParams 0}}
+    {{- $lenParams := len $v.QueryParameters}}
+    {{- if gt $lenParams 0}}
         p := make(requests.Params)
     {{- end}}
     {{- range $kq, $vq := $v.QueryParameters }}
@@ -49,8 +48,8 @@ func (s {{$apiName}}) {{$v.MethodName}}(reqContext *types.{{$v.MethodName}}Conte
     {{- end}}
     {{- end }}
 
-    {{$lenHeader := len $v.Headers}}
-    {{if gt $lenHeader 0}}
+    {{- $lenHeader := len $v.Headers}}
+    {{- if gt $lenHeader 0}}
         h := make(requests.Header)
     {{- end}}
     {{- range $kq, $vq := $v.Headers }}
@@ -71,7 +70,7 @@ func (s {{$apiName}}) {{$v.MethodName}}(reqContext *types.{{$v.MethodName}}Conte
 	{{- end}}
 	{{- end }}
 
-    {{if ne $v.ReqBody ""}}
+    {{- if ne $v.ReqBody ""}}
     if err = reqBody.Validate(); err != nil {
         return
     }
@@ -101,7 +100,7 @@ func (s {{$apiName}}) {{$v.MethodName}}(reqContext *types.{{$v.MethodName}}Conte
         return
     }
 
-    {{ if $v.HasRespBody }}
+    {{- if $v.HasRespBody }}
     if err = json.Unmarshal(resp.Content(), &respBody); err != nil {
         return
     }
