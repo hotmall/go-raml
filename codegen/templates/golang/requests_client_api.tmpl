@@ -43,8 +43,12 @@ func (s {{$apiName}}) {{$v.MethodName}}(reqContext *types.{{$v.MethodName}}Conte
         p["{{$kq}}"] = strconv.Itoa(reqContext.{{$kq|Camelize}})
     {{- else if eq $vq.Type "boolean"}}
         p["{{$kq}}"] = strconv.FormatBool(reqContext.{{$kq|Camelize}})
+    {{- else if eq $vq.Type "number"}}
+        p["{{$kq}}"] = strconv.FormatFloat(reqContext.{{$kq|Camelize}}, 'E', -1, 64)
     {{- else}}
-        p["{{$kq}}"] = reqContext.{{$kq|Camelize}}
+        if reqContext.{{$kq|Camelize}} != "" {
+            p["{{$kq}}"] = reqContext.{{$kq|Camelize}}
+        }
     {{- end}}
     {{- end }}
 
@@ -57,8 +61,12 @@ func (s {{$apiName}}) {{$v.MethodName}}(reqContext *types.{{$v.MethodName}}Conte
         h["{{$kq}}"] = strconv.Itoa(reqContext.{{$kq|printf "%s"|Camelize}})
     {{- else if eq $vq.Type "boolean"}}
         h["{{$kq}}"] = strcony.FormatBool(reqContext.{{$kq|printf "%s"|Camelize}})
+    {{- else if eq $vq.Type "number"}}
+        h["{{$kq}}"] = strcony.FormatFloat(reqContext.{{$kq|printf "%s"|Camelize}}, 'E', -1, 64)
 	{{- else}}
-        h["{{$kq}}"] = reqContext.{{$kq|printf "%s"|Camelize}}
+        if reqContext.{{$kq|printf "%s"|Camelize}} != "" {
+            h["{{$kq}}"] = reqContext.{{$kq|printf "%s"|Camelize}}
+        }
 	{{- end}}
 	{{- end }}
 
