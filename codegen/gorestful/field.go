@@ -33,9 +33,14 @@ func newFieldDef(apiDef *raml.APIDefinition, structName string, prop raml.Proper
 	if _, ok := apiDef.Types[basicType]; ok {
 		titledType := strings.Title(basicType)
 
-		// check if it is a recursive type or property is optional
-		if titledType == strings.Title(structName) || !prop.Required {
+		// check if it is a recursive type
+		if titledType == strings.Title(structName) {
 			titledType = "*" + titledType // add `pointer`, otherwise compiler will complain
+		}
+
+		// if it is not array type and is not required
+		if !commons.IsArrayType(fieldType) && !prop.Required {
+			titledType = "*" + titledType // add `pointer`
 		}
 
 		// use strings.Replace instead of simple assignment because the fieldType
