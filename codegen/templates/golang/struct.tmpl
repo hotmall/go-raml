@@ -36,7 +36,14 @@ func (s *{{.Name}}) Reset() {
         {{- else if $value.IsArray}}
             s.{{$value.Name}} = s.{{$value.Name}}[:0]
         {{- else}}
-            s.{{$value.Name}}.Reset()
+            {{- if $value.IsOmitted}}
+                if s.{{$value.Name}} != nil {
+                    s.{{$value.Name}}.Reset()
+                }
+            {{- else}}
+                s.{{$value.Name}}.Reset()
+            {{- end}}
+            
         {{- end}}
     {{- end}}
 }
