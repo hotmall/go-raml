@@ -35,6 +35,8 @@ func (s *{{.Name}}) Reset() {
             s.{{$value.Name}} = 0.0
         {{- else if $value.IsArray}}
             s.{{$value.Name}} = s.{{$value.Name}}[:0]
+        {{- else if $value.Enum}}
+            s.{{$value.Name}}.Reset()
         {{- else}}
             {{- if $value.IsOmitted}}
                 if s.{{$value.Name}} != nil {
@@ -43,7 +45,6 @@ func (s *{{.Name}}) Reset() {
             {{- else}}
                 s.{{$value.Name}}.Reset()
             {{- end}}
-            
         {{- end}}
     {{- end}}
 }
