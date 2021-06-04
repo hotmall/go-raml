@@ -4,6 +4,7 @@
 package service
 
 import (
+	"strings"
 	{{ range $k, $v := .ServiceImporters -}}
 		{{$v}}
 	{{end}}
@@ -80,8 +81,14 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 	{{- end}}
 	{{- end }}
 
+	for hk := range req.Request.Header {
+		if strings.HasPrefix(hk, "X-") {
+			hv := req.HeaderParameter(hk)
+			mreq.Context.Headers[hk] = hv
+		}
+	}
+
 	{{- range $kq, $vq := $v.Headers }}
-	mreq.Context.Headers["{{$kq}}"] = req.HeaderParameter("{{$kq}}")
 	{{$kq|printf "%s"|CamelizeDownFirst}} := req.HeaderParameter("{{$kq}}")
 	{{- if eq $vq.Type "integer"}}
 	if {{$kq|CamelizeDownFirst}} != "" {
