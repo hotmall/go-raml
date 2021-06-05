@@ -56,6 +56,17 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 		}
 		mreq.Context.{{$kq|Camelize}} = i
 	}
+	{{- else if eq $vq.Type "boolean"}}
+	if {{$kq|CamelizeDownFirst}} != "" {
+		b, err := strconv.ParseBool({{$kq|CamelizeDownFirst}})
+		if err != nil {
+			result := make(map[string]string, 1)
+			result["error"] = err.Error()
+			resp.WriteHeaderAndEntity(400, result)
+			return
+		}
+		mreq.Context.{{$kq|Camelize}} = b 
+	}
 	{{- else}}
 	if {{$kq|CamelizeDownFirst}} != "" {
 		mreq.Context.{{$kq|Camelize}} = {{$kq|CamelizeDownFirst}}
