@@ -31,7 +31,13 @@ func New{{.MethodName}}Req() *{{.MethodName}}Req {
 func (r *{{.MethodName}}Req) Reset() {
     r.Context.Reset()
     {{if .ReqBody -}}
-    r.Body.Reset()
+        {{if .IsReqArray -}}
+            if r.Body != nil {
+                r.Body = r.Body[:0]
+            }
+        {{else -}}
+            r.Body.Reset()
+        {{end -}}
     {{end -}}
 }
 
@@ -66,7 +72,13 @@ func (r *{{.MethodName}}Resp) Reset() {
         delete(r.Headers, key)
     }
     {{if .RespBody -}}
-    r.Body.Reset()
+        {{if .IsRespArray -}}
+            if r.Body != nil {
+                r.Body = r.Body[:0]
+            }
+        {{else -}}
+            r.Body.Reset()
+        {{end -}}
     {{end -}}
 }
 

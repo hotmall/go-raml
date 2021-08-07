@@ -10,24 +10,6 @@ import (
 	"github.com/Jumpscale/go-raml/raml"
 )
 
-// defines go method base object
-type method struct {
-	resource.Method
-	ResourcePath  string
-	reqBody       string // type of the request body
-	PackageName   string
-	resps         []respBody
-	URIParameters map[string]raml.NamedParameter
-}
-
-func (m method) ReqBody() string {
-	return formatReqRespBody(m.reqBody)
-}
-
-func (m method) RespBody() string {
-	return m.firstSuccessRespBodyType()
-}
-
 // TODO : move it to codegen/resource
 type respBody struct {
 	Code     int
@@ -74,7 +56,7 @@ func addPackage(pkgName, typeStr string) string {
 }
 
 func aliasPackage(typeStr string) string {
-	if typeStr == "" || strings.Index(typeStr, ".") < 0 {
+	if typeStr == "" || !strings.Contains(typeStr, ".") {
 		return typeStr
 	}
 	pkgs := strings.Split(typeStr, ".")
@@ -82,6 +64,16 @@ func aliasPackage(typeStr string) string {
 		return typeStr
 	}
 	return fmt.Sprintf("%v_%v.%v", pkgs[1], pkgs[0], pkgs[2])
+}
+
+// defines go method base object
+type method struct {
+	resource.Method
+	ResourcePath  string
+	reqBody       string // type of the request body
+	PackageName   string
+	resps         []respBody
+	URIParameters map[string]raml.NamedParameter
 }
 
 func newMethod(resMeth resource.Method) *method {
@@ -111,6 +103,24 @@ func newMethod(resMeth resource.Method) *method {
 		resps:         resps,
 		URIParameters: URIParameters,
 	}
+}
+
+func (m method) ReqBody() string {
+	return formatReqRespBody(m.reqBody)
+}
+
+func (m method) IsReqArray() bool {
+	reqBody := formatReqRespBody(m.reqBody)
+	return strings.HasPrefix(reqBody, "[]")
+}
+
+func (m method) RespBody() string {
+	return m.firstSuccessRespBodyType()
+}
+
+func (m method) IsRespArray() bool {
+	respBody := m.firstSuccessRespBodyType()
+	return strings.HasPrefix(respBody, "[]")
 }
 
 func (m method) HasRespBody() bool {
