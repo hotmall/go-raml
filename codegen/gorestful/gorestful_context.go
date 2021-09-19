@@ -60,8 +60,10 @@ func (pd *paramDef) buildValidators(p *raml.NamedParameter) {
 		addVal(fmt.Sprintf("max=%v", *p.MaxLength))
 	}
 	if p.Pattern != nil {
+		// `\` need to be escaped with 2 backslashes `\\`
+		pattern := strings.ReplaceAll(*p.Pattern, "\\", "\\\\")
 		// Commas need to be escaped with 2 backslashes `\\`.
-		pattern := strings.ReplaceAll(*p.Pattern, ",", "\\\\,")
+		pattern = strings.ReplaceAll(pattern, ",", "\\\\,")
 		addVal(fmt.Sprintf("regexp=%v", pattern))
 	}
 
