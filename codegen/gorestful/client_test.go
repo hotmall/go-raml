@@ -22,7 +22,7 @@ func TestClientBasic(t *testing.T) {
 			err = raml.ParseFile("../fixtures/client_resources/client.raml", &apiDef)
 			So(err, ShouldBeNil)
 
-			client, err := NewClient(&apiDef, "theclient", "examples.com/libro", targetDir, nil)
+			client, err := NewClient(&apiDef, "requests", "theclient", "examples.com/libro", targetDir, nil)
 			So(err, ShouldBeNil)
 
 			err = client.Generate()
@@ -63,7 +63,7 @@ func TestClientMultiSlashEndpoint(t *testing.T) {
 			err = raml.ParseFile("../fixtures/client_resources/multislash.raml", &apiDef)
 			So(err, ShouldBeNil)
 
-			client, err := NewClient(&apiDef, "theclient", "examples.com/libro", targetDir, nil)
+			client, err := NewClient(&apiDef, "requests", "theclient", "examples.com/libro", targetDir, nil)
 			So(err, ShouldBeNil)
 
 			err = client.Generate()

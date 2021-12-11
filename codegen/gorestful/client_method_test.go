@@ -21,7 +21,7 @@ func TestClientMethodWithSpecialChars(t *testing.T) {
 		err = raml.ParseFile("../fixtures/special_chars.raml", apiDef)
 		So(err, ShouldBeNil)
 
-		client, err := NewClient(apiDef, "theclient", "examples.com/libro", targetDir, nil)
+		client, err := NewClient(apiDef, "requests", "theclient", "examples.com/libro", targetDir, nil)
 		So(err, ShouldBeNil)
 
 		err = client.Generate()
@@ -59,7 +59,7 @@ func TestClientMethodCatchAllRecursiveURL(t *testing.T) {
 		err = raml.ParseFile("../fixtures/catch_all_recursive_url.raml", apiDef)
 		So(err, ShouldBeNil)
 
-		client, err := NewClient(apiDef, "theclient", "examples.com/libro", targetDir, nil)
+		client, err := NewClient(apiDef, "requests", "theclient", "examples.com/libro", targetDir, nil)
 		So(err, ShouldBeNil)
 
 		err = client.Generate()

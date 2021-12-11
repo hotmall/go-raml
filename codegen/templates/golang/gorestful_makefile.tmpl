@@ -8,12 +8,15 @@ ZIP_DATE = $(shell date +"%Y%m%d.%H%M%S")
 COMMIT_HASH = $(shell git rev-parse --short HEAD 2>/dev/null)
 SERVICE_VERSION = $(shell cat VERSION)
 GO_VERSION = $(shell go version)
+ZIP_NAME = $(SERVICE_NAME)-$(SERVICE_VERSION)
 
 LDFLAGS = -X main.Version=$(SERVICE_VERSION) -X main.CommitHash=$(COMMIT_HASH) -X main.BuildDate=$(BUILD_DATE) -X "main.GoVersion=${GO_VERSION}" -s -w
 
 all: build test zip
 
-build:
+build: server
+
+server:
 	go generate
 	go mod tidy
 	go build -v -ldflags '$(LDFLAGS)'
@@ -31,6 +34,6 @@ test:
 	go test $(PACKAGES)
 
 zip: build
-	cd ../runtime && zip -r ../dist/$(SERVICE_NAME)-$(SERVICE_VERSION).$(ZIP_DATE).zip .
+	cd .. && tar -zcvf dist/$(ZIP_NAME).$(ZIP_DATE).tgz -s /runtime/$(ZIP_NAME)/g --exclude .gitignore runtime
 
 {{end -}}

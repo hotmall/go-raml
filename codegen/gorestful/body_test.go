@@ -22,7 +22,7 @@ func TestGenerateStructFromBody(t *testing.T) {
 			err = raml.ParseFile("../fixtures/struct/struct.raml", apiDef)
 			So(err, ShouldBeNil)
 
-			s := NewServer(apiDef, "main", "", "examples.com", false, targetDir, nil)
+			s := NewServer("gorestful", apiDef, "main", "", "examples.com", false, targetDir, nil)
 			err := s.Generate()
 			So(err, ShouldBeNil)
 
@@ -66,7 +66,7 @@ func TestGenerateStructFromBody(t *testing.T) {
 			err = raml.ParseFile("../fixtures/struct/validation.raml", apiDef)
 			So(err, ShouldBeNil)
 
-			s := NewServer(apiDef, "main", "", "examples.com", false, targetDir, nil)
+			s := NewServer("gorestful", apiDef, "main", "", "examples.com", false, targetDir, nil)
 			err := s.Generate()
 			So(err, ShouldBeNil)
 

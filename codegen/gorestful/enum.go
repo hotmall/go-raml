@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/Jumpscale/go-raml/codegen/commons"
@@ -30,7 +31,8 @@ type enum struct {
 // fromStruct: true if this enum come from struct, false if come from struct's field
 func newEnum(structName string, prop raml.Property, pkg string, fromStruct bool) *enum {
 	e := enum{
-		Name: strings.Title(structName) + strings.Title(prop.Name),
+		// Name: strings.Title(structName) + strings.Title(prop.Name),
+		Name: strings.Title(structName) + formatFieldName(prop.Name),
 		Type: convertToGoType(prop.TypeString(), prop.Items.Type),
 		Pkg:  pkg,
 	}
@@ -57,20 +59,24 @@ func newEnumFromStruct(sd *structDef) *enum {
 // e : the enum representation
 func newEnumField(f interface{}, e enum) enumField {
 	var val string
+	var field string
+
+	switch v := f.(type) {
+	case string:
+		val = fmt.Sprintf(`"%v"`, v)
+		field = strings.Title(f.(string))
+	case int:
+		val = fmt.Sprintf("%v", v)
+		field = strconv.Itoa(f.(int))
+	}
 
 	// field name = enum name + field name
-	name := fmt.Sprintf("%v%v", e.Name, f)
+	name := fmt.Sprintf("%v%v", e.Name, field)
 
 	// first, any characters that don't match any valid variable character are replaced with '_'
 	alwaysInvalid := regexp.MustCompile("[^a-zA-Z0-9_]")
 	validName := alwaysInvalid.ReplaceAllLiteralString(name, "_")
 
-	switch v := f.(type) {
-	case string:
-		val = fmt.Sprintf(`"%v"`, v)
-	case int:
-		val = fmt.Sprintf("%v", v)
-	}
 	return enumField{
 		Name:  validName,
 		Value: val,

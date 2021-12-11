@@ -22,7 +22,7 @@ func TestServerMethodWithSpecialChars(t *testing.T) {
 		err = raml.ParseFile("../fixtures/special_chars.raml", apiDef)
 		So(err, ShouldBeNil)
 
-		gs := NewServer(apiDef, "main", "apidocs", "examples.com/libro", true, targetDir, nil)
+		gs := NewServer("gorestful", apiDef, "main", "apidocs", "examples.com/libro", true, targetDir, nil)
 		_, err = gs.generateServerResources(targetDir)
 		So(err, ShouldBeNil)
 
@@ -70,7 +70,7 @@ func TestServerMethodWithCatchAllRoute(t *testing.T) {
 		err = raml.ParseFile("../fixtures/catch_all_recursive_url.raml", apiDef)
 		So(err, ShouldBeNil)
 
-		gs := NewServer(apiDef, "main", "apidocs", "examples.com/libro", true, targetDir, nil)
+		gs := NewServer("gorestful", apiDef, "main", "apidocs", "examples.com/libro", true, targetDir, nil)
 		_, err = gs.generateServerResources(targetDir)
 		So(err, ShouldBeNil)
 
@@ -105,7 +105,7 @@ func TestServerMethodWithCatchAllRouteInRoot(t *testing.T) {
 		err = raml.ParseFile("../fixtures/catch_all_recursive_in_root.raml", apiDef)
 		So(err, ShouldBeNil)
 
-		gs := NewServer(apiDef, "main", "apidocs", "examples.com/libro", true, targetDir, nil)
+		gs := NewServer("gorestful", apiDef, "main", "apidocs", "examples.com/libro", true, targetDir, nil)
 		err = gs.Generate()
 		So(err, ShouldBeNil)
 
