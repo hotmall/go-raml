@@ -8,7 +8,7 @@ import handlers
 import {{$v.ImportPath}} as {{$v.Name}}{{ end }}
 
 
-{{.Name | ToLower }}_api = Blueprint('{{.Name | ToLower}}_api', __name__)
+{{.Name | ToLower }}_api = Blueprint('{{.Name | ToLower}}_api', __name__, url_prefix='{{.BaseURI}}')
 {{ range $k, $v := .Methods }}
 
 {{ if $v.IsCatchAllRoute}}@{{$apiName | ToLower}}_api.route('{{$v.RouteCatchAll}}', defaults={'path': ''}, methods=['{{$v.Verb}}'], strict_slashes=False){{end}}

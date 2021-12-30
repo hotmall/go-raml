@@ -23,7 +23,7 @@ func testLibrary(t *testing.T) {
 		So(err, ShouldBeNil)
 
 		libRootURLs := []string{"https://raw.githubusercontent.com/Jumpscale/go-raml/master/codegen/fixtures/libraries"}
-		server := NewFlaskServer(apiDef, "apidocs", targetDir, true, libRootURLs, false)
+		server := NewFlaskServer(apiDef, "apidocs", targetDir, true, libRootURLs, false, "TestApp")
 		err = server.Generate()
 		So(err, ShouldBeNil)
 

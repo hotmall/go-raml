@@ -50,7 +50,7 @@ func (s *Server) Generate() error {
 		generator = gorestful.NewServer(s.Kind, apiDef, s.PackageName, s.APIDocsDir, s.RootImportPath, s.WithMain,
 			s.Dir, s.LibRootURLs)
 	case langPython:
-		generator = python.NewServer(s.Kind, apiDef, s.APIDocsDir, s.Dir, s.WithMain, s.LibRootURLs)
+		generator = python.NewServer(s.Kind, apiDef, s.APIDocsDir, s.Dir, s.WithMain, s.LibRootURLs, s.RootImportPath)
 	case langNim:
 		generator = nim.NewServer(apiDef, s.APIDocsDir, s.Dir)
 	case langTarantool:

@@ -20,11 +20,12 @@ type FlaskServer struct {
 	Gevent       bool
 	Template     serverTemplate
 	targetDir    string
+	Name         string
 }
 
 // NewFlaskServer creates new flask server from an RAML file
 func NewFlaskServer(apiDef *raml.APIDefinition, apiDocsDir, targetDir string,
-	withMain bool, libRootURLs []string, gevent bool) *FlaskServer {
+	withMain bool, libRootURLs []string, gevent bool, name string) *FlaskServer {
 
 	// TODO : get rid of this global variables
 	globAPIDef = apiDef
@@ -48,6 +49,7 @@ func NewFlaskServer(apiDef *raml.APIDefinition, apiDocsDir, targetDir string,
 		Gevent:       gevent,
 		Template:     templates,
 		targetDir:    targetDir,
+		Name:         name,
 	}
 }
 
@@ -104,7 +106,13 @@ func (ps *FlaskServer) Generate() error {
 
 	// requirements.txt file
 	if err := commons.GenerateFile(nil, "./templates/python/requirements_python.tmpl", "requirements_python",
-		filepath.Join(ps.targetDir, "requirements.txt"), true); err != nil {
+		filepath.Join(ps.targetDir, "requirements.txt"), false); err != nil {
+		return err
+	}
+
+	// etc/conf/gunicorn.py
+	if err := commons.GenerateFile(nil, "./templates/python/server_gunicorn.tmpl", "server_gunicorn",
+		filepath.Join(ps.targetDir, "/etc/conf/gunicorn.py"), false); err != nil {
 		return err
 	}
 
@@ -112,6 +120,10 @@ func (ps *FlaskServer) Generate() error {
 	if ps.WithMain {
 		// generate HTML front page
 		if err := commons.GenerateFile(ps, "./templates/index.html.tmpl", "index.html", filepath.Join(ps.targetDir, "index.html"), true); err != nil {
+			return err
+		}
+		// generate Makefile
+		if err := commons.GenerateFile(ps, "./templates/python/server_makefile.tmpl", "python_server_makefile", filepath.Join(ps.targetDir, "Makefile"), true); err != nil {
 			return err
 		}
 		// main file

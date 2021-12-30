@@ -248,6 +248,10 @@ func GenerateAllClasses(apiDef *raml.APIDefinition, dir string, capnp bool) ([]s
 	template := "./templates/python/class_python.tmpl"
 	templateName := "class_python"
 
+	ci := classInit{
+		Types: make(map[string][]string),
+	}
+
 	names := []string{}
 	for name, t := range types.AllTypes(apiDef, "") {
 		var errGen error
@@ -275,6 +279,11 @@ func GenerateAllClasses(apiDef *raml.APIDefinition, dir string, capnp bool) ([]s
 		if errGen != nil {
 			return names, errGen
 		}
+
+		if len(results) > 0 {
+			className := results[len(results)-1]
+			ci.append(className, results)
+		}
 		names = append(names, results...)
 	}
 
@@ -288,12 +297,17 @@ func GenerateAllClasses(apiDef *raml.APIDefinition, dir string, capnp bool) ([]s
 			if err != nil {
 				return names, err
 			}
+			if len(results) > 0 {
+				className := results[len(results)-1]
+				ci.append(className, results)
+			}
 			names = append(names, results...)
 		}
-
 	}
-	return names, nil
 
+	// generate pytypes/__init__.py
+	ci.generate(dir)
+	return names, nil
 }
 
 // GeneratePythonCapnpClasses generates python classes from a raml definition along with function to load binaries from/to capnp

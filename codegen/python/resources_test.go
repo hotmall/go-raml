@@ -22,7 +22,7 @@ func TestPythonResource(t *testing.T) {
 			err := raml.ParseFile("../fixtures/server_resources/deliveries.raml", apiDef)
 			So(err, ShouldBeNil)
 
-			fs := NewFlaskServer(apiDef, "apidocs", targetdir, true, nil, false)
+			fs := NewFlaskServer(apiDef, "apidocs", targetdir, true, nil, false, "TestApp")
 
 			err = fs.generateResources(targetdir)
 			So(err, ShouldBeNil)

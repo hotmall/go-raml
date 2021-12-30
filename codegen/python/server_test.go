@@ -30,7 +30,7 @@ func TestServer(t *testing.T) {
 		}
 
 		Convey("Congo python server", func() {
-			server := NewFlaskServer(apiDef, "apidocs", targetDir, true, nil, false)
+			server := NewFlaskServer(apiDef, "apidocs", targetDir, true, nil, false, "TestApp")
 			err = server.Generate()
 			So(err, ShouldBeNil)
 			validateFiles(files, targetDir, rootFixture)
@@ -58,7 +58,7 @@ func TestServer(t *testing.T) {
 
 		Convey("Congo gevent python server", func() {
 			files = append(files, "server.py")
-			server := NewFlaskServer(apiDef, "apidocs", targetDir, true, nil, true)
+			server := NewFlaskServer(apiDef, "apidocs", targetDir, true, nil, true, "TestApp")
 			err = server.Generate()
 			So(err, ShouldBeNil)
 			validateFiles(files, targetDir, rootFixture)

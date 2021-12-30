@@ -22,7 +22,7 @@ func TestMethod(t *testing.T) {
 			err := raml.ParseFile("../fixtures/server_resources/display_name/api.raml", apiDef)
 			So(err, ShouldBeNil)
 
-			fs := NewFlaskServer(apiDef, "apidocs", targetDir, true, nil, false)
+			fs := NewFlaskServer(apiDef, "apidocs", targetDir, true, nil, false, "TestApp")
 
 			err = fs.Generate()
 			So(err, ShouldBeNil)
@@ -58,7 +58,7 @@ func TestServerMethodWithComplexBody(t *testing.T) {
 		err = raml.ParseFile("../fixtures/body.raml", apiDef)
 		So(err, ShouldBeNil)
 
-		fs := NewFlaskServer(apiDef, "apidocs", targetDir, true, nil, false)
+		fs := NewFlaskServer(apiDef, "apidocs", targetDir, true, nil, false, "TestApp")
 
 		err = fs.Generate()
 		So(err, ShouldBeNil)
@@ -93,7 +93,7 @@ func TestServerMethodWithSpecialChars(t *testing.T) {
 		err = raml.ParseFile("../fixtures/special_chars.raml", apiDef)
 		So(err, ShouldBeNil)
 
-		fs := NewFlaskServer(apiDef, "apidocs", targetDir, true, nil, false)
+		fs := NewFlaskServer(apiDef, "apidocs", targetDir, true, nil, false, "TestApp")
 
 		err = fs.Generate()
 		So(err, ShouldBeNil)
@@ -134,7 +134,7 @@ func TestServerMethodWithCatchAllRecursiveURL(t *testing.T) {
 		err = raml.ParseFile("../fixtures/catch_all_recursive_url.raml", apiDef)
 		So(err, ShouldBeNil)
 
-		fs := NewFlaskServer(apiDef, "apidocs", targetDir, true, nil, false)
+		fs := NewFlaskServer(apiDef, "apidocs", targetDir, true, nil, false, "TestApp")
 
 		err = fs.Generate()
 		So(err, ShouldBeNil)
@@ -203,7 +203,7 @@ func TestServerMethodWithInRootCatchAllRecursiveURL(t *testing.T) {
 		err = raml.ParseFile("../fixtures/catch_all_recursive_in_root.raml", apiDef)
 		So(err, ShouldBeNil)
 
-		fs := NewFlaskServer(apiDef, "apidocs", targetDir, true, nil, false)
+		fs := NewFlaskServer(apiDef, "apidocs", targetDir, true, nil, false, "TestApp")
 
 		err = fs.Generate()
 		So(err, ShouldBeNil)

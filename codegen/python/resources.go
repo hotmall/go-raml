@@ -14,6 +14,7 @@ type pythonResource struct {
 	*resource.Resource
 	MiddlewaresArr []middleware
 	Methods        []serverMethod
+	BaseURI        string
 }
 
 func generateResources(resources []pythonResource, templates serverTemplate, dir string) error {
@@ -60,8 +61,13 @@ func (pr *pythonResource) addMiddleware(mwr middleware) {
 }
 
 func newResource(rd resource.Resource, apiDef *raml.APIDefinition, kind string) pythonResource {
+	baseURI := rd.APIDef.BaseURI
+	if strings.Index(baseURI, "{version}") > 0 {
+		baseURI = strings.Replace(baseURI, "{version}", rd.APIDef.Version, -1)
+	}
 	r := pythonResource{
 		Resource: &rd,
+		BaseURI:  baseURI,
 	}
 	// generate methods
 	for _, rm := range rd.Methods {
