@@ -132,7 +132,7 @@ func (ps *FlaskServer) Generate() error {
 		}
 	}
 
-	return generateEmptyInitPy(ps.targetDir)
+	return nil
 }
 
 func (ps *FlaskServer) ShowAPIDocsAndIndex() bool {
