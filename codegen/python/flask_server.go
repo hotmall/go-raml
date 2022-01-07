@@ -115,6 +115,17 @@ func (ps *FlaskServer) Generate() error {
 		filepath.Join(ps.targetDir, "/etc/conf/gunicorn.py"), false); err != nil {
 		return err
 	}
+	// utils/logging.py
+	if err := commons.GenerateFile(nil, "./templates/python/server_logging.tmpl", "server_logging",
+		filepath.Join(ps.targetDir, "/utils/logging.py"), true); err != nil {
+		return err
+	}
+
+	// utils/__init__.py
+	if err := commons.GenerateFile(nil, "./templates/python/server_logging_init.tmpl", "server_logging_init",
+		filepath.Join(ps.targetDir, "/utils/__init__.py"), false); err != nil {
+		return err
+	}
 
 	// generate main
 	if ps.WithMain {
