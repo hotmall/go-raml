@@ -134,7 +134,7 @@ func (ps *FlaskServer) Generate() error {
 			return err
 		}
 		// generate Makefile
-		if err := commons.GenerateFile(ps, "./templates/python/server_makefile.tmpl", "python_server_makefile", filepath.Join(ps.targetDir, "Makefile"), true); err != nil {
+		if err := commons.GenerateFile(ps, "./templates/python/server_makefile.tmpl", "python_server_makefile", filepath.Join(ps.targetDir, "Makefile"), false); err != nil {
 			return err
 		}
 		// main file

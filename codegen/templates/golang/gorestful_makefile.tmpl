@@ -1,6 +1,10 @@
 {{- define "gorestful_makefile" -}}
+# THIS FILE IS SAFE TO EDIT. It will not be overwritten when rerunning go-raml.
+
 SERVICE_NAME = $(shell basename {{.RootImportPath}})
 PACKAGES = $(shell go list ./... | grep -v '/vendor/' | grep -v '/delegate' | grep -v '/goraml' | grep -v '${SERVICE_NAME}/service' | grep -v '/types' | grep -v '/message' | grep -v '/beans' | grep -v '/dao' | grep -v '/typeconv')
+
+OS = $(shell uname -s)
 
 BUILD_DATE = $(shell date +%FT%T%z)
 ZIP_DATE = $(shell date +"%Y%m%d.%H%M%S")
@@ -11,6 +15,11 @@ GO_VERSION = $(shell go version)
 ZIP_NAME = $(SERVICE_NAME)-$(SERVICE_VERSION)
 
 LDFLAGS = -X main.Version=$(SERVICE_VERSION) -X main.CommitHash=$(COMMIT_HASH) -X main.BuildDate=$(BUILD_DATE) -X "main.GoVersion=${GO_VERSION}" -s -w
+
+SEDFLAG = --transform=s/runtime/$(ZIP_NAME)/g
+ifeq ($(OS),Darwin)
+	SEDFLAG = -s /runtime/$(ZIP_NAME)/g
+endif
 
 all: build test zip
 
@@ -34,6 +43,6 @@ test:
 	go test $(PACKAGES)
 
 zip: build
-	cd .. && tar -zcvf dist/$(ZIP_NAME).$(ZIP_DATE).tgz -s /runtime/$(ZIP_NAME)/g --exclude .gitignore runtime
+	cd .. && tar -zcvf dist/$(ZIP_NAME).$(ZIP_DATE).tgz $(SEDFLAG) --exclude .gitignore runtime
 
 {{end -}}
