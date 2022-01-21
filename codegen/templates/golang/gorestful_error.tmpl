@@ -15,4 +15,8 @@ func NewError(status int, err error) *Error {
 	}
 }
 
+type Any interface{
+	Reset()
+}
+
 {{- end -}}
