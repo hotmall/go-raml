@@ -37,6 +37,10 @@ func (s *{{.Name}}) Reset() {
             s.{{$value.Name}} = s.{{$value.Name}}[:0]
         {{- else if $value.Enum}}
             s.{{$value.Name}}.Reset()
+        {{- else if eq $value.Type "Any"}}
+            if s.{{$value.Name}} != nil {
+                s.{{$value.Name}}.Reset()
+            }
         {{- else}}
             {{- if $value.IsOmitted}}
                 if s.{{$value.Name}} != nil {
