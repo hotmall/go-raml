@@ -15,7 +15,8 @@ SERVICE_VERSION = $(shell cat VERSION)
 GO_VERSION = $(shell go version)
 ZIP_NAME = $(SERVICE_NAME)-$(SERVICE_VERSION)
 
-LDFLAGS = -X main.Version=$(SERVICE_VERSION) -X main.CommitHash=$(COMMIT_HASH) -X main.BuildDate=$(BUILD_DATE) -X "main.GoVersion=${GO_VERSION}" -s -w
+XFLAGS = -X main.Version=$(SERVICE_VERSION) -X main.CommitHash=$(COMMIT_HASH) -X main.BuildDate=$(BUILD_DATE) -X "main.GoVersion=${GO_VERSION}"
+LDFLAGS = $(XFLAGS) -s -w
 
 SEDFLAG = --transform=s/runtime/$(ZIP_NAME)/g
 ifeq ($(OS),darwin)
@@ -32,6 +33,12 @@ server:
 	go build -v -ldflags '$(LDFLAGS)'
 	mv -f $(SERVICE_NAME) ../runtime/bin
 
+debug:
+	go generate
+	go mod tidy
+	go build -v -gcflags '-l' -ldflags '$(XFLAGS)'
+	mv -f $(SERVICE_NAME) ../runtime/bin
+
 clean:
 	rm -rf delegate
 	rm -rf goraml
@@ -43,7 +50,7 @@ clean:
 test:
 	go test $(PACKAGES)
 
-zip: build
+zip: debug
 	cd .. && tar -zcvf dist/$(ZIP_NAME).$(ZIP_DATE).tgz $(SEDFLAG) --exclude .gitignore runtime
 
 release: build
