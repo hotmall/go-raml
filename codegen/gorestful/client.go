@@ -96,6 +96,11 @@ func (gc Client) Generate() error {
 		return err
 	}
 
+	// generate error struct
+	if err := generateErrorStruct(gc.apiDef, gc.TargetDir); err != nil {
+		return err
+	}
+
 	// libraries
 	if err := generateLibraries(gc.libraries, gc.TargetDir, gc.libsRootURLs); err != nil {
 		return err
