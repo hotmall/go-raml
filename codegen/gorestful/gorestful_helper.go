@@ -13,3 +13,12 @@ func generateErrorStruct(apiDef *raml.APIDefinition, dir string) error {
 	}
 	return nil
 }
+
+func generateAnyStruct(apiDef *raml.APIDefinition, dir string) error {
+	filename := dir + "/types/any.go"
+	if err := commons.GenerateFile(apiDef, "./templates/golang/gorestful_client_any.tmpl",
+		"gorestful_client_any_template", filename, true); err != nil {
+		return err
+	}
+	return nil
+}
