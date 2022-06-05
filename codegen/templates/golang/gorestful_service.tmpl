@@ -29,7 +29,11 @@ func New{{.Name}}Service(delegator delegate.{{.Name}}Delegate) *restful.WebServi
 		Produces("{{.APIDef.MediaType}}")
 
 	{{ range $k, $v := .Methods }}
-	ws.Route(ws.{{$v.Verb}}("{{$v.Endpoint}}").To(s.{{$v.MethodName}}))
+	{{- if and (not $v.ReqBody) (or (eq $v.Verb "PUT") (eq $v.Verb "POST"))}}
+		ws.Route(ws.{{$v.Verb}}("{{$v.Endpoint}}").To(s.{{$v.MethodName}}).AllowedMethodsWithoutContentType([]string{"{{$v.Verb}}"}))
+	{{- else}}
+		ws.Route(ws.{{$v.Verb}}("{{$v.Endpoint}}").To(s.{{$v.MethodName}}))
+	{{- end}}
 	{{- end}}
 
 	return ws
@@ -123,8 +127,8 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 		result["error"] = err.Error()
 		resp.WriteHeaderAndEntity(400, result)
 		return
-    	}
-	{{- if .ReqBody }}
+    }
+	{{- if $v.ReqBody }}
 	
 	// decode request
 	if err := req.ReadEntity(&mreq.Body); err != nil {
@@ -133,7 +137,7 @@ func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restf
 		resp.WriteHeaderAndEntity(400, result)
 		return
 	}
-	{{ if .ReqBodyNeedValidation}}
+	{{ if $v.ReqBodyNeedValidation}}
 	// validate request
 	if err := mreq.Body.Validate(); err != nil {
 		result := make(map[string]string, 1)

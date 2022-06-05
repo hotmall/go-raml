@@ -88,12 +88,14 @@ func (s {{$apiName}}) {{$v.MethodName}}(reqContext *types.{{$v.MethodName}}Conte
     }
     {{- end}}
 
-    {{if eq $v.Verb "DELETE"}}
+    {{$noDefaultContentType := and (ne $v.Verb "GET") (ne $v.Verb "HEAD") (not .ReqBody)}}
+
+    {{- if $noDefaultContentType}}
         opts := requests.Option{
             RequestHeaderNoDefaultContentType: true,
         }
     {{- end}}
-    resp, err := requests.Request("{{$v.Verb}}", s.baseURI {{$v.Route}}{{if gt $lenParams 0}}, p{{end}}{{if gt $lenHeader 0}}, h{{end}}{{if .ReqBody}}, requests.JSON(jsonBody){{end}}{{- if eq $v.Verb "DELETE"}}, opts{{end}})
+    resp, err := requests.Request("{{$v.Verb}}", s.baseURI {{$v.Route}}{{if gt $lenParams 0}}, p{{end}}{{if gt $lenHeader 0}}, h{{end}}{{if .ReqBody}}, requests.JSON(jsonBody){{end}}{{- if $noDefaultContentType}}, opts{{end}})
     if err != nil {
         return
     }
