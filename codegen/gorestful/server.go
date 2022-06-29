@@ -91,6 +91,10 @@ func (gs *Server) Generate() error {
 		return err
 	}
 
+	if err := generateAnyStruct(gs.apiDef, gs.TargetDir); err != nil {
+		return err
+	}
+
 	// security scheme
 	if err := generateSecurity(gs.apiDef.SecuritySchemes, gs.TargetDir, gs.PackageName); err != nil {
 		log.Errorf("failed to generate security scheme:%v", err)

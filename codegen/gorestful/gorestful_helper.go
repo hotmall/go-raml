@@ -6,7 +6,7 @@ import (
 )
 
 func generateErrorStruct(apiDef *raml.APIDefinition, dir string) error {
-	filename := dir + "/types/error.go"
+	filename := dir + "/types/Error.go"
 	if err := commons.GenerateFile(apiDef, "./templates/golang/gorestful_error.tmpl",
 		"gorestful_error_template", filename, true); err != nil {
 		return err
@@ -15,9 +15,9 @@ func generateErrorStruct(apiDef *raml.APIDefinition, dir string) error {
 }
 
 func generateAnyStruct(apiDef *raml.APIDefinition, dir string) error {
-	filename := dir + "/types/any.go"
-	if err := commons.GenerateFile(apiDef, "./templates/golang/gorestful_client_any.tmpl",
-		"gorestful_client_any_template", filename, true); err != nil {
+	filename := dir + "/types/Any.go"
+	if err := commons.GenerateFile(apiDef, "./templates/golang/gorestful_any.tmpl",
+		"gorestful_any_template", filename, true); err != nil {
 		return err
 	}
 	return nil
