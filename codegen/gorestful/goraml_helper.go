@@ -45,7 +45,7 @@ func (gh goramlHelper) generate(dir string) error {
 	}{
 		PackageName: gh.packageName,
 	}
-	if gh.command == "client" && gh.kind == "requests" {
+	if gh.kind == "requests" || gh.kind == "gorestful" {
 		if err := commons.GenerateFile(ctx, "./templates/golang/requests_go_api_error.tmpl", "requests_go_api_error",
 			filepath.Join(pkgDir, "api_error.go"), true); err != nil {
 			return err
