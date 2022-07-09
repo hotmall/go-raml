@@ -13,6 +13,11 @@ func (a *Any) Reset() {
 	*a = (*a)[:0]
 }
 
+// Validate check if the data is legal
+func (a *Any) Validate() error {
+    return nil
+}
+
 // MarshalJSON returns a as the JSON encoding of a.
 func (a Any) MarshalJSON() ([]byte, error) {
 	if a == nil {
