@@ -5,10 +5,13 @@ package {{.PackageName}}
 
 import (
 	"gopkg.in/validator.v2"
+    "github.com/emicklei/go-restful"
 )
 
 // {{.Name}}Context is the context of method {{.Name}}
 type {{.Name}}Context struct {
+    Request *restful.Request `json:"-"`
+    Response *restful.Response `json:"-"`
     Headers map[string]string `json:"headers" validate:"nonnil"`
     {{- range $key, $value := .Fields }}
         {{$value.Name}} {{if eq $value.IsComposition false}} {{$value.Type}} `json:"{{$key}}{{if eq $value.IsOmitted true}},omitempty{{end}}"{{if $value.Validators}} validate:"{{$value.Validators}}"{{end}}` {{end}}
@@ -33,6 +36,8 @@ func New{{.Name}}Context() *{{.Name}}Context {
 
 // Reset reset field
 func (s *{{.Name}}Context) Reset() {
+    s.Request = nil
+    s.Response = nil
     for key := range s.Headers {
         delete(s.Headers, key)
     }

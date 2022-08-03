@@ -46,6 +46,8 @@ func New{{.Name}}Service(delegator delegate.{{.Name}}Delegate) *restful.WebServi
 func (s {{$apiName}}Service) {{$v.MethodName}}(req *restful.Request, resp *restful.Response) {
 	mreq := message.Acquire{{$v.MethodName}}Req()
 	defer message.Release{{$v.MethodName}}Req(mreq)
+	mreq.Context.Request = req
+	mreq.Context.Response = resp
 
 	{{- range $kq, $vq := $v.QueryParameters }}
 	{{$kq|CamelizeDownFirst}} := req.QueryParameter("{{$kq}}")
