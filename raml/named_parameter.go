@@ -39,7 +39,7 @@ type NamedParameter struct {
 	// If the enum attribute is defined, API clients and servers MUST verify
 	// that a parameter's value matches a value in the enum array
 	// Enum parsing is currently disabled because of:
-	// https://github.com/Jumpscale/go-raml/issues/99
+	// https://github.com/hotmall/go-raml/issues/99
 	//Enum []Any `yaml:",flow"`
 
 	// The pattern attribute is a regular expression that a parameter of type

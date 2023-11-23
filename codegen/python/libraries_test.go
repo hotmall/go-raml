@@ -8,8 +8,8 @@ import (
 
 	. "github.com/smartystreets/goconvey/convey"
 
-	"github.com/Jumpscale/go-raml/raml"
-	"github.com/Jumpscale/go-raml/utils"
+	"github.com/hotmall/go-raml/raml"
+	"github.com/hotmall/go-raml/utils"
 )
 
 // TODO FIXME : it disabled because this test is failed and WTF support is planned to be removed

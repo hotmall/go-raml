@@ -5,8 +5,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/Jumpscale/go-raml/codegen/commons"
-	"github.com/Jumpscale/go-raml/codegen/resource"
+	"github.com/hotmall/go-raml/codegen/commons"
+	"github.com/hotmall/go-raml/codegen/resource"
 )
 
 // defines a python client lib method

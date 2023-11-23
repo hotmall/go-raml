@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/raml"
 )
 
 func TestHasCatchAllInRootRoute(t *testing.T) {

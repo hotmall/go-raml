@@ -3,7 +3,7 @@ package commons
 import (
 	"strings"
 
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/raml"
 )
 
 // HasJSONBody checks if this raml.Bodies has JSON body that need to be generated it's struct.

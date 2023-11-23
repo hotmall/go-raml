@@ -1,8 +1,8 @@
 package codegen
 
 import (
-	"github.com/Jumpscale/go-raml/codegen/capnp"
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/codegen/capnp"
+	"github.com/hotmall/go-raml/raml"
 )
 
 // GenerateCapnp generates capnp schema from RAML specs

@@ -3,7 +3,7 @@ package types
 import (
 	"testing"
 
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/raml"
 	. "github.com/smartystreets/goconvey/convey"
 )
 

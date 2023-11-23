@@ -6,9 +6,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/Jumpscale/go-raml/codegen/commons"
-	"github.com/Jumpscale/go-raml/codegen/types"
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/codegen/commons"
+	"github.com/hotmall/go-raml/codegen/types"
+	"github.com/hotmall/go-raml/raml"
 )
 
 var (

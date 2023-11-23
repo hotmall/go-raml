@@ -3,7 +3,7 @@ package python
 import (
 	"path/filepath"
 
-	"github.com/Jumpscale/go-raml/codegen/commons"
+	"github.com/hotmall/go-raml/codegen/commons"
 )
 
 type classInit struct {

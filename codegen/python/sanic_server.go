@@ -3,9 +3,9 @@ package python
 import (
 	"path/filepath"
 
-	"github.com/Jumpscale/go-raml/codegen/commons"
-	"github.com/Jumpscale/go-raml/codegen/resource"
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/codegen/commons"
+	"github.com/hotmall/go-raml/codegen/resource"
+	"github.com/hotmall/go-raml/raml"
 )
 
 // SanicServer represents a sanic asyncio server

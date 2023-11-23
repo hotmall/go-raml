@@ -14,9 +14,9 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 
-	"github.com/Jumpscale/go-raml/codegen/templates"
-	"github.com/Jumpscale/go-raml/raml"
-	"github.com/Jumpscale/go-raml/utils"
+	"github.com/hotmall/go-raml/codegen/templates"
+	"github.com/hotmall/go-raml/raml"
+	"github.com/hotmall/go-raml/utils"
 )
 
 var (

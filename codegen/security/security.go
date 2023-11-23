@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/raml"
 	"sort"
 )
 

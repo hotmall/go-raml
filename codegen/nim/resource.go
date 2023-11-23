@@ -5,9 +5,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/Jumpscale/go-raml/codegen/commons"
-	cr "github.com/Jumpscale/go-raml/codegen/resource"
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/codegen/commons"
+	cr "github.com/hotmall/go-raml/codegen/resource"
+	"github.com/hotmall/go-raml/raml"
 )
 
 type resource struct {

@@ -5,7 +5,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 
-	"github.com/Jumpscale/go-raml/codegen"
+	"github.com/hotmall/go-raml/codegen"
 )
 
 // ServerCommand is executed to generate a go server from a RAML specification

@@ -1,10 +1,10 @@
 package codegen
 
 import (
-	"github.com/Jumpscale/go-raml/codegen/gorestful"
-	"github.com/Jumpscale/go-raml/codegen/nim"
-	"github.com/Jumpscale/go-raml/codegen/python"
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/codegen/gorestful"
+	"github.com/hotmall/go-raml/codegen/nim"
+	"github.com/hotmall/go-raml/codegen/python"
+	"github.com/hotmall/go-raml/raml"
 )
 
 // ClientConfig represents client's config

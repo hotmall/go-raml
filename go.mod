@@ -1,4 +1,4 @@
-module github.com/Jumpscale/go-raml
+module github.com/hotmall/go-raml
 
 go 1.16
 

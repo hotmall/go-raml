@@ -70,7 +70,7 @@ func TestResourceTypeInheritance(t *testing.T) {
 				"If no values match the value given for title, use digest_all_fields instead")
 
 			// collection merging
-			// test disabled because of issue: https://github.com/Jumpscale/go-raml/issues/99
+			// test disabled because of issue: https://github.com/hotmall/go-raml/issues/99
 			//So(qps["platform"].Enum, ShouldContain, "mac")
 			//So(qps["platform"].Enum, ShouldContain, "unix")
 			//So(qps["platform"].Enum, ShouldContain, "win")

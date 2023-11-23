@@ -3,8 +3,8 @@ package gorestful
 import (
 	"path/filepath"
 
-	"github.com/Jumpscale/go-raml/codegen/commons"
-	"github.com/Jumpscale/go-raml/codegen/date"
+	"github.com/hotmall/go-raml/codegen/commons"
+	"github.com/hotmall/go-raml/codegen/date"
 )
 
 // date generator

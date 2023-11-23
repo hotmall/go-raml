@@ -6,13 +6,13 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 
-	"github.com/Jumpscale/go-raml/codegen/apidocs"
-	"github.com/Jumpscale/go-raml/codegen/generator"
-	"github.com/Jumpscale/go-raml/codegen/gorestful"
-	"github.com/Jumpscale/go-raml/codegen/nim"
-	"github.com/Jumpscale/go-raml/codegen/python"
-	"github.com/Jumpscale/go-raml/codegen/tarantool"
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/codegen/apidocs"
+	"github.com/hotmall/go-raml/codegen/generator"
+	"github.com/hotmall/go-raml/codegen/gorestful"
+	"github.com/hotmall/go-raml/codegen/nim"
+	"github.com/hotmall/go-raml/codegen/python"
+	"github.com/hotmall/go-raml/codegen/tarantool"
+	"github.com/hotmall/go-raml/raml"
 )
 
 var (

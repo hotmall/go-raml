@@ -1,7 +1,7 @@
 package codegen
 
 import (
-	"github.com/Jumpscale/go-raml/utils"
+	"github.com/hotmall/go-raml/utils"
 	"io/ioutil"
 	"os"
 	"path/filepath"

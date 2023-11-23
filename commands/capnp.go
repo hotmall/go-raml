@@ -6,8 +6,8 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 
-	"github.com/Jumpscale/go-raml/codegen"
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/codegen"
+	"github.com/hotmall/go-raml/raml"
 )
 
 // CapnpCommand is executed to generate capnpm model from RAML specification

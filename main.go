@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Jumpscale/go-raml/commands"
+	"github.com/hotmall/go-raml/commands"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"

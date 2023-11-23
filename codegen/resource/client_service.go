@@ -3,7 +3,7 @@ package resource
 import (
 	"strings"
 
-	"github.com/Jumpscale/go-raml/codegen/commons"
+	"github.com/hotmall/go-raml/codegen/commons"
 )
 
 // ClientService defines a client service.

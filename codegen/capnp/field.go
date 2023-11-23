@@ -1,7 +1,7 @@
 package capnp
 
 import (
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/raml"
 	"github.com/pinzolo/casee"
 )
 

@@ -3,7 +3,7 @@ package capnp
 import (
 	"fmt"
 
-	"github.com/Jumpscale/go-raml/codegen/commons"
+	"github.com/hotmall/go-raml/codegen/commons"
 )
 
 // schema for Go need additional data needed by Go compiler

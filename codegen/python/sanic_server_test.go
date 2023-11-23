@@ -8,8 +8,8 @@ import (
 
 	. "github.com/smartystreets/goconvey/convey"
 
-	"github.com/Jumpscale/go-raml/raml"
-	"github.com/Jumpscale/go-raml/utils"
+	"github.com/hotmall/go-raml/raml"
+	"github.com/hotmall/go-raml/utils"
 )
 
 func TestSanicServer(t *testing.T) {

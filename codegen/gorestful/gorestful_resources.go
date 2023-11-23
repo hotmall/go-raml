@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Jumpscale/go-raml/codegen/commons"
+	"github.com/hotmall/go-raml/codegen/commons"
 )
 
 func (gr *goResource) ServiceImporters() []string {

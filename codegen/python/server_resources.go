@@ -3,8 +3,8 @@ package python
 import (
 	"sort"
 
-	"github.com/Jumpscale/go-raml/codegen/resource"
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/codegen/resource"
+	"github.com/hotmall/go-raml/raml"
 )
 
 func getServerResourcesDefs(apiDef *raml.APIDefinition) []resource.Resource {

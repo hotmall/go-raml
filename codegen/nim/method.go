@@ -6,10 +6,10 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 
-	"github.com/Jumpscale/go-raml/codegen/commons"
-	cr "github.com/Jumpscale/go-raml/codegen/resource"
-	"github.com/Jumpscale/go-raml/codegen/security"
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/codegen/commons"
+	cr "github.com/hotmall/go-raml/codegen/resource"
+	"github.com/hotmall/go-raml/codegen/security"
+	"github.com/hotmall/go-raml/raml"
 )
 
 // TODO : split between server & client struct
@@ -17,7 +17,7 @@ type method struct {
 	cr.Method
 	ResourcePath string
 	ReqBody      string
-	RespBody     string                  // TODO fix it as part of https://github.com/Jumpscale/go-raml/issues/350
+	RespBody     string                  // TODO fix it as part of https://github.com/hotmall/go-raml/issues/350
 	SecuredBy    []raml.DefinitionChoice // TODO : only used by the server
 }
 
@@ -30,7 +30,7 @@ func getMethodName(endpoint, displayName, verb string) string {
 
 func newMethod(rm cr.Method) method {
 	// response body
-	// TODO fix it as part of https://github.com/Jumpscale/go-raml/issues/350
+	// TODO fix it as part of https://github.com/hotmall/go-raml/issues/350
 	var respBody string
 	for code, resp := range rm.Responses {
 		code := commons.AtoiOrPanic(string(code))

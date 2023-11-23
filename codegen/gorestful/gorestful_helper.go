@@ -1,8 +1,8 @@
 package gorestful
 
 import (
-	"github.com/Jumpscale/go-raml/codegen/commons"
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/codegen/commons"
+	"github.com/hotmall/go-raml/raml"
 )
 
 func generateErrorStruct(apiDef *raml.APIDefinition, dir string) error {

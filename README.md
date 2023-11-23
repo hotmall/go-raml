@@ -63,7 +63,7 @@ Currently there are still some [limitations](docs/limitations.md) on the RAML 1.
 
 make sure you have at least go 1.8 installed !
 
-`go get -u github.com/Jumpscale/go-raml`
+`go get -u github.com/hotmall/go-raml`
 
 
 ### Build in development
@@ -79,13 +79,13 @@ Install go-bindata, we need it to compile all resource files to .go file
 
 To rebuild APIDocs files to .go file
 ```
-cd $GOPATH/src/github.com/Jumpscale/go-raml
+cd $GOPATH/src/github.com/hotmall/go-raml
 sh build_apidocs.sh
 ```
 
 Build go-raml and all resource files
 ```
-cd $GOPATH/src/github.com/Jumpscale/go-raml
+cd $GOPATH/src/github.com/hotmall/go-raml
 make install
 ```
 

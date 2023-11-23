@@ -1,6 +1,6 @@
 PACKAGES = $(shell go list ./... | grep -v '/vendor/')
 
-PACKAGE = github.com/Jumpscale/go-raml
+PACKAGE = github.com/hotmall/go-raml
 COMMIT_HASH = $(shell git rev-parse --short HEAD 2>/dev/null)
 BUILD_DATE = $(shell date +%FT%T%z)
 

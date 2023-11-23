@@ -818,7 +818,7 @@ func (bp BodiesProperty) GetProperty(name string) Property {
 
 // - normalize inline array definition
 // - TODO : handle inlined type definition as part of
-//	 https://github.com/Jumpscale/go-raml/issues/96
+//	 https://github.com/hotmall/go-raml/issues/96
 func (bp *BodiesProperty) postProcess() {
 	bp.normalizeArray()
 }

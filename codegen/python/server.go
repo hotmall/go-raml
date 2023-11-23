@@ -3,8 +3,8 @@ package python
 import (
 	log "github.com/Sirupsen/logrus"
 
-	"github.com/Jumpscale/go-raml/codegen/generator"
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/codegen/generator"
+	"github.com/hotmall/go-raml/raml"
 )
 
 var (

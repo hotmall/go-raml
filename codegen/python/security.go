@@ -5,9 +5,9 @@ import (
 
 	"path/filepath"
 
-	"github.com/Jumpscale/go-raml/codegen/commons"
-	"github.com/Jumpscale/go-raml/codegen/security"
-	"github.com/Jumpscale/go-raml/raml"
+	"github.com/hotmall/go-raml/codegen/commons"
+	"github.com/hotmall/go-raml/codegen/security"
+	"github.com/hotmall/go-raml/raml"
 )
 
 const (
