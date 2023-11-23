@@ -1,5 +1,3 @@
-bitbucket.org/pkg/inflect v0.0.0-20130829110746-8961c3750a47 h1:XDrztcXGcx7jow3UUE2dpYtdSWVUigoyn8G+shykEtw=
-bitbucket.org/pkg/inflect v0.0.0-20130829110746-8961c3750a47/go.mod h1:8Rt8gHhG+tKz8P3SoEzL/ZNVl25fPhMFKItv5HLIdtY=
 github.com/Sirupsen/logrus v0.10.0 h1:I5b9VTLOttchcwWCzzNfRDAW2EFGlEN49hyoyq6d2ZI=
 github.com/Sirupsen/logrus v0.10.0/go.mod h1:rmk17hk6i8ZSAJkSDa7nOxamrG+SP4P0mm+DAvExv4U=
 github.com/chuckpreslar/inflect v0.0.0-20150228233301-423e3ac59c61 h1:p3YW8skKpechCIYMN6D26pCy+7hedHyAzpjqNQcuWFo=
@@ -16,6 +14,8 @@ github.com/gorilla/context v0.0.0-20150820051245-1c83b3eabd45 h1:f69IpTg7NxbCoH5
 github.com/gorilla/context v0.0.0-20150820051245-1c83b3eabd45/go.mod h1:kBGZzfjB9CEq2AlWe17Uuf7NDRt0dE0s8S51q0aT7Yg=
 github.com/gorilla/mux v1.6.1-0.20171109035402-2d5fef06b891 h1:+Bw2euuJhuRflg4Z6ihh7u8GEFN/SS6T4tpI7fyEZrw=
 github.com/gorilla/mux v1.6.1-0.20171109035402-2d5fef06b891/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
+github.com/hotmall/inflect v0.0.0-20231123091359-cd182455344d h1:9Wnfk2XIUJm36w82hxB6Ui+NITpIUJIuBTzS08tKOtY=
+github.com/hotmall/inflect v0.0.0-20231123091359-cd182455344d/go.mod h1:e2zlnd7bm57xccKMb8myb6Hkhik06Hk9jgEb6TBqHr0=
 github.com/jinzhu/inflection v0.0.0-20170102125226-1c35d901db3d h1:jRQLvyVGL+iVtDElaEIDdKwpPqUIZJfzkNLV34htpEc=
 github.com/jinzhu/inflection v0.0.0-20170102125226-1c35d901db3d/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
 github.com/jtolds/gls v0.0.0-20150401064343-9a4a02dbe491 h1:JcCGiVd7BXlt3M0Av9IfvfrCevgGhzVO7+TpNw9o1dk=

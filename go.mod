@@ -3,7 +3,6 @@ module github.com/hotmall/go-raml
 go 1.16
 
 require (
-	bitbucket.org/pkg/inflect v0.0.0-20130829110746-8961c3750a47
 	github.com/Sirupsen/logrus v0.10.0
 	github.com/chuckpreslar/inflect v0.0.0-20150228233301-423e3ac59c61
 	github.com/codegangsta/cli v1.20.1-0.20171116045612-7ace96b43d4b
@@ -12,6 +11,7 @@ require (
 	github.com/gigforks/yaml v0.0.0-20160510064715-3396035bfe07
 	github.com/gorilla/context v0.0.0-20150820051245-1c83b3eabd45 // indirect
 	github.com/gorilla/mux v1.6.1-0.20171109035402-2d5fef06b891
+	github.com/hotmall/inflect v0.0.0-20231123091359-cd182455344d
 	github.com/jinzhu/inflection v0.0.0-20170102125226-1c35d901db3d
 	github.com/jtolds/gls v0.0.0-20150401064343-9a4a02dbe491 // indirect
 	github.com/kr/pretty v0.2.1

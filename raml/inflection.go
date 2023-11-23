@@ -3,7 +3,7 @@ package raml
 import (
 	"strings"
 
-	"bitbucket.org/pkg/inflect"
+	"github.com/hotmall/inflect"
 	chuck_inflect "github.com/chuckpreslar/inflect"
 	jinzhu_inflection "github.com/jinzhu/inflection"
 )
