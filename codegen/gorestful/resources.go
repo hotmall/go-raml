@@ -1,18 +1,16 @@
 package gorestful
 
 import (
-	"path/filepath"
 	"strings"
 
 	"github.com/hotmall/go-raml/codegen/commons"
 	"github.com/hotmall/go-raml/codegen/resource"
-	"github.com/hotmall/go-raml/raml"
 )
 
-const (
-	resourceIfTemplate  = "./templates/golang/server_resources_interface.tmpl" // resource interface template
-	resourceAPITemplate = "./templates/golang/server_resources_api.tmpl"       // resource API template
-)
+// const (
+// 	resourceIfTemplate  = "./templates/golang/server_resources_interface.tmpl" // resource interface template
+// 	resourceAPITemplate = "./templates/golang/server_resources_api.tmpl"       // resource API template
+// )
 
 const (
 	serverAPIDir = "handlers" // dir on which we put our server API implementation
@@ -49,65 +47,65 @@ func newGoResource(rd *resource.Resource, packageName string) *goResource {
 }
 
 // generate interface file of a resource
-func (gr *goResource) generateInterfaceFile(directory string) error {
-	filename := directory + "/" + strings.ToLower(gr.Name) + "_if.go"
-	return commons.GenerateFile(gr, resourceIfTemplate, "resource_if_template", filename, true)
-}
+// func (gr *goResource) generateInterfaceFile(directory string) error {
+// 	filename := directory + "/" + strings.ToLower(gr.Name) + "_if.go"
+// 	return commons.GenerateFile(gr, resourceIfTemplate, "resource_if_template", filename, true)
+// }
 
 // generate API implementation in one file per method mode
-func (gr *goResource) generateAPIImplementations(dir string) error {
-	// generate the main API impl file, which only contains struct
-	mainCtx := map[string]interface{}{
-		"PackageName": gr.PackageName,
-		"Name":        gr.Name,
-		"Endpoint":    gr.Endpoint,
-	}
+// func (gr *goResource) generateAPIImplementations(dir string) error {
+// 	// generate the main API impl file, which only contains struct
+// 	mainCtx := map[string]interface{}{
+// 		"PackageName": gr.PackageName,
+// 		"Name":        gr.Name,
+// 		"Endpoint":    gr.Endpoint,
+// 	}
 
-	mainFile := filepath.Join(dir, strings.ToLower(gr.Name)+"_api")
-	if err := commons.GenerateFile(mainCtx, "./templates/golang/server_resource_api_main_go.tmpl",
-		"server_resource_api_main_go", mainFile+".go", false); err != nil {
-		return err
-	}
+// 	mainFile := filepath.Join(dir, strings.ToLower(gr.Name)+"_api")
+// 	if err := commons.GenerateFile(mainCtx, "./templates/golang/server_resource_api_main_go.tmpl",
+// 		"server_resource_api_main_go", mainFile+".go", false); err != nil {
+// 		return err
+// 	}
 
-	// generate per methods file
-	for _, sm := range gr.Methods {
-		ctx := map[string]interface{}{
-			"Method":      sm,
-			"APIName":     gr.Name,
-			"PackageName": gr.PackageName,
-		}
-		filename := mainFile + "_" + sm.MethodName + ".go"
-		if err := commons.GenerateFile(ctx, "./templates/golang/server_resource_api_impl_go.tmpl",
-			"server_resource_api_impl_go", filename, false); err != nil {
-			return err
-		}
-	}
-	return nil
-}
+// 	// generate per methods file
+// 	for _, sm := range gr.Methods {
+// 		ctx := map[string]interface{}{
+// 			"Method":      sm,
+// 			"APIName":     gr.Name,
+// 			"PackageName": gr.PackageName,
+// 		}
+// 		filename := mainFile + "_" + sm.MethodName + ".go"
+// 		if err := commons.GenerateFile(ctx, "./templates/golang/server_resource_api_impl_go.tmpl",
+// 			"server_resource_api_impl_go", filename, false); err != nil {
+// 			return err
+// 		}
+// 	}
+// 	return nil
+// }
 
 // generate Go representation of server's resource.
 // A resource have two kind of files:
-// - interface file
-//		contains API interface and routing code
-//		always regenerated
-// - API implementation
-//		implementation of the API interface.
-//		Don't generate if the file already exist
-func (gr *goResource) generate(r *raml.Resource, URI, dir string, libRootURLs []string) error {
-	if err := gr.generateInterfaceFile(dir); err != nil {
-		return err
-	}
+//   - interface file
+//     contains API interface and routing code
+//     always regenerated
+//   - API implementation
+//     implementation of the API interface.
+//     Don't generate if the file already exist
+// func (gr *goResource) generate(r *raml.Resource, URI, dir string, libRootURLs []string) error {
+// 	if err := gr.generateInterfaceFile(dir); err != nil {
+// 		return err
+// 	}
 
-	apiDir := filepath.Join(dir, serverAPIDir, gr.PackageName)
-	return gr.generateAPIImplementations(apiDir)
-}
+// 	apiDir := filepath.Join(dir, serverAPIDir, gr.PackageName)
+// 	return gr.generateAPIImplementations(apiDir)
+// }
 
 // InterfaceImportPaths returns all packages imported by
 // this resource interface file
 func (gr goResource) InterfaceImportPaths() []string {
 	ip := map[string]struct{}{
-		"net/http":               struct{}{},
-		"github.com/gorilla/mux": struct{}{},
+		"net/http":               {},
+		"github.com/gorilla/mux": {},
 	}
 
 	for _, gm := range gr.Methods {

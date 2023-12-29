@@ -11,7 +11,7 @@ func (gr *goResource) ServiceImporters() []string {
 	ip := map[string]struct{}{}
 	ip[`"`+globRootImportPath+"/message"+`"`] = struct{}{}
 	ip[`"`+globRootImportPath+"/delegate"+`"`] = struct{}{}
-	ip[`"github.com/emicklei/go-restful"`] = struct{}{}
+	ip[`restful "github.com/emicklei/go-restful/v3"`] = struct{}{}
 
 	isStrConv := false
 	for _, m := range gr.Methods {
@@ -48,7 +48,7 @@ func (gr *goResource) DelegateImporters() []string {
 func (gr *goResource) ResourceImporters() []string {
 	ip := map[string]struct{}{}
 	ip[`"`+globRootImportPath+"/service"+`"`] = struct{}{}
-	ip[`"github.com/emicklei/go-restful"`] = struct{}{}
+	ip[`restful "github.com/emicklei/go-restful/v3"`] = struct{}{}
 	return commons.MapToSortedStrings(ip)
 }
 

@@ -101,7 +101,8 @@ func copyHeaders(headers map[string]raml.NamedParameter, m *method) {
 	}
 
 	for key, value := range m.Headers {
-		name := fmt.Sprintf("%s", key)
+		// name := fmt.Sprintf("%s", key)
+		name := string(key)
 		headers[name] = raml.NamedParameter{
 			Name:        value.Name,
 			DisplayName: value.DisplayName,

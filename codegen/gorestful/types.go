@@ -62,10 +62,11 @@ func isBuiltinOrGoramlType(tip string) bool {
 			return true
 		}
 	}
-	if mapDate(tip) != "" {
-		return true
-	}
-	return false
+	// if mapDate(tip) != "" {
+	// 	return true
+	// }
+	// return false
+	return mapDate(tip) != ""
 }
 
 func goramlPkgDir() string {

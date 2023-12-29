@@ -14,9 +14,10 @@ import (
 // library defines an RAML library
 // it is implemented as package in Go.
 // Library defined in RAML using `uses` keyword.
-// - key become library's package name
-// - if value contain directory, the directories become root directory
-//   of the generated package
+//   - key become library's package name
+//   - if value contain directory, the directories become root directory
+//     of the generated package
+//
 // example :
 // files: libraries/files.raml -> generated as `files` package in `libraries` directory
 // types-lib: lib-types.raml  -> generated as `types_lib` package in current directory
@@ -94,11 +95,11 @@ func (gl *goLibrary) generate() error {
 func libImportPath(rootImportPath, typ string, libRootURLs []string) string {
 	// all library use '.',
 	// return nothing if it is not a library
-	if strings.Index(typ, ".") < 0 {
+	if !strings.Contains(typ, ".") {
 		return ""
 	}
 
-	if strings.Index(typ, "json.RawMessage") >= 0 {
+	if strings.Contains(typ, "json.RawMessage") {
 		return `"encoding/json"`
 	}
 
@@ -124,10 +125,14 @@ func libImportPath(rootImportPath, typ string, libRootURLs []string) string {
 
 // generate import line with alias style
 // example:
-//  a.com/libraries/libname/types ->  libname_types "a.com/libraries/libname/types"
+//
+//	a.com/libraries/libname/types ->  libname_types "a.com/libraries/libname/types"
+//
 // because we generate all raml Types under `types` directory and package,
 // all types from libraries is going to have import line with this format:
-//    root_import_path/libraries/libname/types
+//
+//	root_import_path/libraries/libname/types
+//
 // we create the alias to avoid conflict with other `types` directory/package.
 func aliasLibTypeImportPath(path string) string {
 	elems := strings.Split(path, "/")
