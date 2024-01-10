@@ -4,6 +4,8 @@
 SERVICE_NAME = $(shell basename {{.RootImportPath}})
 PACKAGES = $(shell go list ./... | grep -v '/vendor/' | grep -v '/delegate' | grep -v '/goraml' | grep -v '${SERVICE_NAME}/service' | grep -v '/types' | grep -v '/message' | grep -v '/beans' | grep -v '/dao' | grep -v '/typeconv')
 
+PACKAGE = github.com/hotmall
+
 OS = $(shell uname -s | tr A-Z a-z)
 ARCH = $(shell uname -m | tr A-Z a-z)
 
@@ -15,7 +17,7 @@ SERVICE_VERSION = $(shell cat VERSION)
 GO_VERSION = $(shell go version)
 ZIP_NAME = $(SERVICE_NAME)-$(SERVICE_VERSION)
 
-XFLAGS = -X main.Version=$(SERVICE_VERSION) -X main.CommitHash=$(COMMIT_HASH) -X main.BuildDate=$(BUILD_DATE) -X "main.GoVersion=${GO_VERSION}"
+XFLAGS = -X $(PACKAGE)/commandline.ProcName=$(SERVICE_NAME) -X $(PACKAGE)/commandline.Version=$(SERVICE_VERSION) -X $(PACKAGE)/commandline.CommitHash=$(COMMIT_HASH) -X $(PACKAGE)/commandline.BuildDate=$(BUILD_DATE) -X "$(PACKAGE)/commandline.GoVersion=${GO_VERSION}"
 LDFLAGS = $(XFLAGS) -s -w
 
 SEDFLAG = --transform=s/runtime/$(ZIP_NAME)/g
@@ -30,14 +32,12 @@ build: server
 server:
 	go generate
 	go mod tidy
-	go build -v -ldflags '$(LDFLAGS)'
-	mv -f $(SERVICE_NAME) ../runtime/bin
+	go build -o ../runtime/bin -v -ldflags '$(LDFLAGS)'
 
 debug:
 	go generate
 	go mod tidy
-	go build -v -gcflags '-l' -ldflags '$(XFLAGS)'
-	mv -f $(SERVICE_NAME) ../runtime/bin
+	go build -o ../runtime/bin -v -gcflags '-l' -ldflags '$(XFLAGS)'
 
 clean:
 	rm -rf delegate

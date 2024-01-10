@@ -1,6 +1,6 @@
 module github.com/hotmall/go-raml
 
-go 1.19
+go 1.21
 
 require (
 	github.com/Sirupsen/logrus v0.10.0
