@@ -51,8 +51,8 @@ test:
 	go test $(PACKAGES)
 
 zip: debug
-	cd .. && tar -zcvf dist/$(ZIP_NAME).$(ZIP_DATE).tgz $(SEDFLAG) --exclude .gitignore runtime
+	cd .. && tar -zcvf dist/$(ZIP_NAME).$(ZIP_DATE).tgz $(SEDFLAG) --exclude .gitignore --exclude .DS_Store runtime
 
 release: build
-	cd .. && tar -zcvf dist/$(ZIP_NAME).$(OS).$(ARCH).tgz $(SEDFLAG) --exclude .gitignore runtime
+	cd .. && tar -zcvf dist/$(ZIP_NAME).$(OS).$(ARCH).tgz $(SEDFLAG) --exclude .gitignore --exclude .DS_Store runtime
 {{end -}}
